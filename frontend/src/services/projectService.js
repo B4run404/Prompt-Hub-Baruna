@@ -49,3 +49,21 @@ export async function deleteProject(id) {
     if (!response.ok) throw new Error('Failed to delete project');
     return true;
 }
+
+export async function addPrompt(projectId, promptId) {
+    const response = await fetch(`${API_BASE_URL}/${projectId}/prompts/${promptId}`, {
+        method: 'POST',
+        headers: getHeaders()
+    });
+    if (!response.ok) throw new Error('Failed to add prompt to project');
+    return response.json();
+}
+
+export async function removePrompt(projectId, promptId) {
+    const response = await fetch(`${API_BASE_URL}/${projectId}/prompts/${promptId}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    });
+    if (!response.ok) throw new Error('Failed to remove prompt from project');
+    return response.json();
+}

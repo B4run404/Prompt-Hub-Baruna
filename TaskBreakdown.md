@@ -149,7 +149,7 @@ API Relasi Project-Prompt
 Task 2 (Selesai)
 UI Halaman Detail Project
 
-Task 3
+Task 3 (Selesai)
 Komponen List Prompt di Dalam Project
 
 Task 4

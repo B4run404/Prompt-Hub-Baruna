@@ -331,12 +331,20 @@ export async function renderProjectDetail(container, projectId) {
                     </div>
                 </div>
 
-                <!-- Placeholder for Task 3: List Prompts in Project -->
-                <div id="project-prompts-container">
-                    <div class="clay-card" style="text-align: center; padding: 32px;">
-                        <i class="fa-solid fa-list-check" style="font-size: 2.5rem; color: var(--text-secondary); margin-bottom: 16px;"></i>
-                        <h3>Project Prompts</h3>
-                        <p style="color: var(--text-secondary);">Prompt list integration will be built in Task 3.</p>
+                <!-- Task 3: List Prompts in Project -->
+                <div id="project-prompts-container" class="clay-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h3><i class="fa-solid fa-list-check text-primary"></i> Linked Prompts</h3>
+                        <div style="display: flex; gap: 8px;">
+                            <select id="select-prompt-to-add" class="clay-input" style="padding: 6px 12px; height: auto;">
+                                <option value="">Loading prompts...</option>
+                            </select>
+                            <button id="btn-link-prompt" class="clay-btn"><i class="fa-solid fa-link"></i> Add</button>
+                        </div>
+                    </div>
+                    
+                    <div id="linked-prompts-list">
+                        <p style="color: var(--text-secondary); text-align: center; padding: 20px;">No prompts linked to this project yet.</p>
                     </div>
                 </div>
             </div>
@@ -346,6 +354,75 @@ export async function renderProjectDetail(container, projectId) {
 
         document.getElementById('btn-back-projects').addEventListener('click', () => {
             renderProjectList(container);
+        });
+
+        // Fetch All Prompts for Dropdown
+        const { fetchPrompts } = await import('../../services/promptService.js');
+        const allPromptsRes = await fetchPrompts();
+        const allPrompts = allPromptsRes.data || [];
+        
+        const linkedPromptIds = (project.prompts || []).map(p => p.id);
+        const availablePrompts = allPrompts.filter(p => !linkedPromptIds.includes(p.id));
+
+        const selectPrompt = document.getElementById('select-prompt-to-add');
+        if (availablePrompts.length === 0) {
+            selectPrompt.innerHTML = '<option value="">No available prompts to add</option>';
+            selectPrompt.disabled = true;
+            document.getElementById('btn-link-prompt').disabled = true;
+        } else {
+            selectPrompt.innerHTML = '<option value="">-- Select a Prompt --</option>' + availablePrompts.map(p => `<option value="${p.id}">${p.title}</option>`).join('');
+        }
+
+        // Render Linked Prompts
+        const linkedListContainer = document.getElementById('linked-prompts-list');
+        if (project.prompts && project.prompts.length > 0) {
+            let promptsHtml = '<div style="display: flex; flex-direction: column; gap: 12px;">';
+            project.prompts.forEach(prompt => {
+                promptsHtml += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(0,0,0,0.02); border-radius: 8px; border: 1px solid rgba(0,0,0,0.05);">
+                        <div>
+                            <strong style="font-size: 1.1rem; display: block; margin-bottom: 4px;">${prompt.title}</strong>
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">${prompt.content.substring(0, 60)}...</span>
+                        </div>
+                        <button class="icon-btn text-danger btn-unlink-prompt" data-prompt-id="${prompt.id}" title="Remove from Project">
+                            <i class="fa-solid fa-unlink"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            promptsHtml += '</div>';
+            linkedListContainer.innerHTML = promptsHtml;
+        }
+
+        // Handle Linking
+        document.getElementById('btn-link-prompt').addEventListener('click', async () => {
+            const promptId = selectPrompt.value;
+            if (!promptId) return alert('Please select a prompt first.');
+            
+            try {
+                const { addPrompt } = await import('../../services/projectService.js');
+                await addPrompt(projectId, promptId);
+                renderProjectDetail(container, projectId); // Refresh detail view
+            } catch (err) {
+                alert(err.message || 'Failed to link prompt');
+            }
+        });
+
+        // Handle Unlinking
+        const unlinkBtns = document.querySelectorAll('.btn-unlink-prompt');
+        unlinkBtns.forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const promptId = btn.getAttribute('data-prompt-id');
+                if (confirm('Remove this prompt from the project?')) {
+                    try {
+                        const { removePrompt } = await import('../../services/projectService.js');
+                        await removePrompt(projectId, promptId);
+                        renderProjectDetail(container, projectId); // Refresh detail view
+                    } catch (err) {
+                        alert(err.message || 'Failed to unlink prompt');
+                    }
+                }
+            });
         });
 
     } catch (err) {
