@@ -246,6 +246,7 @@ function useTemplate(template) {
     
     // Trigger navigation to prompt creation
     import('../../core/router.js').then(router => {
+        window.location.hash = '#prompts';
         router.loadPage('prompts');
         // Wait a bit for the module to load, then open the modal automatically
         setTimeout(() => {
