@@ -40,7 +40,7 @@ export async function renderProjectList(container) {
                 const progressWidth = p.progress ? p.progress : 0;
                 
                 html += `
-                    <div class="clay-card" style="display: flex; flex-direction: column; gap: 12px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div class="clay-card project-card" data-id="${p.id}" style="display: flex; flex-direction: column; gap: 12px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <h3 style="font-size: 1.2rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; margin-bottom: 4px;" title="${p.name}">${p.name}</h3>
                             <div style="display: flex; gap: 4px;">
@@ -117,6 +117,15 @@ export async function renderProjectList(container) {
                         alert(err.message || 'Failed to delete project');
                     }
                 }
+            });
+        });
+
+        // Click Project Card to View Details
+        const projectCards = document.querySelectorAll('.project-card');
+        projectCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const id = card.getAttribute('data-id');
+                renderProjectDetail(container, id);
             });
         });
 
@@ -264,4 +273,93 @@ function showProjectModal(container, existingProject = null) {
             submitBtn.textContent = isEdit ? 'Update Project' : 'Save Project';
         }
     });
+}
+
+// Fitur Detail Project (Task 2 Sprint 8)
+export async function renderProjectDetail(container, projectId) {
+    container.innerHTML = `
+        <div class="clay-card">
+            <button id="btn-back-projects" class="clay-btn" style="background-color: transparent; box-shadow: none; padding: 0; color: var(--primary); margin-bottom: 16px;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Projects
+            </button>
+            <p>Loading project details...</p>
+        </div>
+    `;
+
+    try {
+        const { getProjectById } = await import('../../services/projectService.js');
+        const response = await getProjectById(projectId);
+        const project = response.data;
+
+        const statusColor = project.status === 'Completed' ? 'var(--success, #10b981)' : 'var(--primary)';
+        
+        let html = `
+            <div>
+                <button id="btn-back-projects" class="clay-btn" style="background-color: transparent; box-shadow: none; padding: 0; color: var(--primary); margin-bottom: 24px;">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Projects
+                </button>
+                
+                <div class="clay-card" style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h2 style="font-size: 2rem; margin-bottom: 8px;">${project.name}</h2>
+                            <p style="color: var(--text-secondary); font-size: 1.1rem;">${project.description || 'No description provided.'}</p>
+                        </div>
+                        <span style="background: rgba(139, 92, 246, 0.1); color: ${statusColor}; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem;">
+                            ${project.status || 'Active'}
+                        </span>
+                    </div>
+
+                    <div style="display: flex; gap: 32px; margin-top: 16px; flex-wrap: wrap;">
+                        <div>
+                            <span style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">Deadline</span>
+                            <strong><i class="fa-solid fa-calendar text-primary"></i> ${project.deadline ? new Date(project.deadline).toLocaleDateString() : 'None'}</strong>
+                        </div>
+                        <div>
+                            <span style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">Framework</span>
+                            <strong><i class="fa-solid fa-code text-primary"></i> ${project.framework || 'None'}</strong>
+                        </div>
+                        <div style="flex-grow: 1; max-width: 300px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">
+                                <span>Progress</span>
+                                <strong>${project.progress || 0}%</strong>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);">
+                                <div style="height: 100%; width: ${project.progress || 0}%; background-color: var(--primary); border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Placeholder for Task 3: List Prompts in Project -->
+                <div id="project-prompts-container">
+                    <div class="clay-card" style="text-align: center; padding: 32px;">
+                        <i class="fa-solid fa-list-check" style="font-size: 2.5rem; color: var(--text-secondary); margin-bottom: 16px;"></i>
+                        <h3>Project Prompts</h3>
+                        <p style="color: var(--text-secondary);">Prompt list integration will be built in Task 3.</p>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.innerHTML = html;
+
+        document.getElementById('btn-back-projects').addEventListener('click', () => {
+            renderProjectList(container);
+        });
+
+    } catch (err) {
+        container.innerHTML = `
+            <div class="clay-card">
+                <button id="btn-back-projects" class="clay-btn" style="background-color: transparent; box-shadow: none; padding: 0; color: var(--primary); margin-bottom: 16px;">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Projects
+                </button>
+                <h2 style="color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Error</h2>
+                <p style="margin-top: 16px; color: var(--text-secondary);">${err.message}</p>
+            </div>
+        `;
+        document.getElementById('btn-back-projects').addEventListener('click', () => {
+            renderProjectList(container);
+        });
+    }
 }

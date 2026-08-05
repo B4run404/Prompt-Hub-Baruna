@@ -146,7 +146,7 @@ Testing (Project API)
 Task 1 (Selesai)
 API Relasi Project-Prompt
 
-Task 2
+Task 2 (Selesai)
 UI Halaman Detail Project
 
 Task 3
