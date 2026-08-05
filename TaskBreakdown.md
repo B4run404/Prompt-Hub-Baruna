@@ -47,16 +47,16 @@ Testing & Error Handling (Prompt)
 ---
 
 ### Sprint 2: Database & ORM Setup
-Task 1
+Task 1 (Selesai)
 Koneksi Prisma ORM ke PostgreSQL
 
-Task 2
+Task 2 (Selesai)
 Schema Inti (Users & Projects)
 
-Task 3
+Task 3 (Selesai)
 Database Migration
 
-Task 4
+Task 4 (Selesai)
 Seeding Data Dummy
 
 ---
