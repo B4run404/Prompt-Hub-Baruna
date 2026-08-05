@@ -164,7 +164,7 @@ API Toggle Favorite (Prompt/Project)
 Task 2 (Selesai)
 UI Tombol Star/Favorite
 
-Task 3
+Task 3 (Selesai)
 API Statistik Dashboard (Total Row)
 
 Task 4
