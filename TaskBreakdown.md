@@ -266,10 +266,10 @@ UI Search Results Overlay
 ---
 
 ### Sprint 16: Backup & Restore
-Task 1
+Task 1 (Selesai)
 Skrip Export Database ke JSON (Backend)
 
-Task 2
+Task 2 (Selesai)
 Skrip Import JSON ke Database (Backend)
 
 Task 3
