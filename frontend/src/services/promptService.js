@@ -1,6 +1,7 @@
+import { API_BASE_URL as CONFIG_API_URL } from '../config.js';
 import { getToken } from './authService.js';
 
-const API_BASE_URL = 'http://localhost:3000/api/v1/prompts';
+const API_BASE_URL = `${CONFIG_API_URL}/prompts`;
 
 const getHeaders = () => {
     return {
@@ -18,7 +19,7 @@ export async function fetchPrompts() {
 }
 
 export async function getPromptById(id) {
-    const response = await fetch(`${API_BASE_URL}/${id}`, { headers: getHeaders() });
+    const response = await fetch(`${CONFIG_API_URL}/${id}`, { headers: getHeaders() });
     if (!response.ok) {
         throw new Error('Failed to fetch prompt details');
     }
@@ -40,7 +41,7 @@ export async function createPrompt(data) {
 
 // Fitur Edit Prompt (Task 6)
 export async function updatePrompt(id, data) {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
+    const response = await fetch(`${CONFIG_API_URL}/${id}`, {
         method: 'PUT',
         headers: getHeaders(),
         body: JSON.stringify(data)
@@ -53,7 +54,7 @@ export async function updatePrompt(id, data) {
 
 // Fitur Soft Delete Prompt (Task 7)
 export async function deletePrompt(id) {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
+    const response = await fetch(`${CONFIG_API_URL}/${id}`, {
         method: 'DELETE',
         headers: getHeaders()
     });
@@ -64,7 +65,7 @@ export async function deletePrompt(id) {
 }
 
 export async function hardDeletePrompt(id) {
-    const response = await fetch(`${API_BASE_URL}/${id}/hard`, {
+    const response = await fetch(`${CONFIG_API_URL}/${id}/hard`, {
         method: 'DELETE',
         headers: getHeaders()
     });
@@ -73,7 +74,7 @@ export async function hardDeletePrompt(id) {
 }
 
 export async function toggleFavoritePrompt(id) {
-    const response = await fetch(`${API_BASE_URL}/${id}/favorite`, {
+    const response = await fetch(`${CONFIG_API_URL}/${id}/favorite`, {
         method: 'PATCH',
         headers: getHeaders()
     });

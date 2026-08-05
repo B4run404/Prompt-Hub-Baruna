@@ -1,3 +1,4 @@
+import { API_BASE_URL as CONFIG_API_URL } from '../../config.js';
 export async function renderSettingsPage(container) {
     container.innerHTML = `
         <div style="max-width: 800px; margin: 0 auto; padding-bottom: 40px;">
@@ -33,7 +34,7 @@ export async function renderSettingsPage(container) {
             const { getToken } = await import('../../services/authService.js');
             const token = getToken();
             
-            const response = await fetch('http://localhost:3000/api/v1/backup/export', {
+            const response = await fetch(`${CONFIG_API_URL}/backup/export`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -102,7 +103,7 @@ export async function renderSettingsPage(container) {
             const formData = new FormData();
             formData.append('backup', file);
 
-            const response = await fetch('http://localhost:3000/api/v1/backup/import', {
+            const response = await fetch(`${CONFIG_API_URL}/backup/import`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`

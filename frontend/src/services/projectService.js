@@ -1,6 +1,7 @@
+import { API_BASE_URL as CONFIG_API_URL } from '../config.js';
 import { getToken } from './authService.js';
 
-const API_BASE_URL = 'http://localhost:3000/api/v1/projects';
+const API_BASE_URL = `${CONFIG_API_URL}/projects`;
 
 function getHeaders() {
     return {
@@ -16,7 +17,7 @@ export async function fetchProjects() {
 }
 
 export async function getProjectById(id) {
-    const response = await fetch(`${API_BASE_URL}/${id}`, { headers: getHeaders() });
+    const response = await fetch(`${CONFIG_API_URL}/${id}`, { headers: getHeaders() });
     if (!response.ok) throw new Error('Failed to fetch project details');
     return response.json();
 }
@@ -32,7 +33,7 @@ export async function createProject(data) {
 }
 
 export async function updateProject(id, data) {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
+    const response = await fetch(`${CONFIG_API_URL}/${id}`, {
         method: 'PUT',
         headers: getHeaders(),
         body: JSON.stringify(data)
@@ -42,7 +43,7 @@ export async function updateProject(id, data) {
 }
 
 export async function deleteProject(id) {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
+    const response = await fetch(`${CONFIG_API_URL}/${id}`, {
         method: 'DELETE',
         headers: getHeaders()
     });
@@ -51,7 +52,7 @@ export async function deleteProject(id) {
 }
 
 export async function addPrompt(projectId, promptId) {
-    const response = await fetch(`${API_BASE_URL}/${projectId}/prompts/${promptId}`, {
+    const response = await fetch(`${CONFIG_API_URL}/${projectId}/prompts/${promptId}`, {
         method: 'POST',
         headers: getHeaders()
     });
@@ -60,7 +61,7 @@ export async function addPrompt(projectId, promptId) {
 }
 
 export async function removePrompt(projectId, promptId) {
-    const response = await fetch(`${API_BASE_URL}/${projectId}/prompts/${promptId}`, {
+    const response = await fetch(`${CONFIG_API_URL}/${projectId}/prompts/${promptId}`, {
         method: 'DELETE',
         headers: getHeaders()
     });
@@ -69,7 +70,7 @@ export async function removePrompt(projectId, promptId) {
 }
 
 export async function toggleFavoriteProject(id) {
-    const response = await fetch(`${API_BASE_URL}/${id}/favorite`, {
+    const response = await fetch(`${CONFIG_API_URL}/${id}/favorite`, {
         method: 'PATCH',
         headers: getHeaders()
     });

@@ -1,6 +1,7 @@
+import { API_BASE_URL as CONFIG_API_URL } from '../config.js';
 import { API_BASE_URL, getHeaders } from './authService.js';
 
-const ASSET_API_URL = 'http://localhost:3000/api/v1/assets';
+const ASSET_API_URL = `${CONFIG_API_URL}/assets`;
 
 export async function fetchAssets() {
     const response = await fetch(ASSET_API_URL, { headers: getHeaders() });

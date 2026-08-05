@@ -1,6 +1,7 @@
+import { API_BASE_URL as CONFIG_API_URL } from '../config.js';
 import { API_BASE_URL, getHeaders } from './authService.js';
 
-const DOC_API_URL = 'http://localhost:3000/api/v1/documents';
+const DOC_API_URL = `${CONFIG_API_URL}/documents`;
 
 export async function fetchDocuments() {
     const response = await fetch(DOC_API_URL, { headers: getHeaders() });

@@ -1,6 +1,7 @@
+import { API_BASE_URL as CONFIG_API_URL } from '../config.js';
 import { getToken } from './authService.js';
 
-const API_BASE_URL = 'http://localhost:3000/api/v1/templates';
+const API_BASE_URL = `${CONFIG_API_URL}/templates`;
 
 function getHeaders() {
     return {
@@ -17,7 +18,7 @@ export async function fetchTemplates() {
 }
 
 export async function getTemplateById(id) {
-    const response = await fetch(`${API_BASE_URL}/${id}`, { headers: getHeaders() });
+    const response = await fetch(`${CONFIG_API_URL}/${id}`, { headers: getHeaders() });
     if (!response.ok) throw new Error('Failed to fetch template details');
     const data = await response.json();
     return data.data;
@@ -35,7 +36,7 @@ export async function createTemplate(data) {
 }
 
 export async function updateTemplate(id, data) {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
+    const response = await fetch(`${CONFIG_API_URL}/${id}`, {
         method: 'PUT',
         headers: getHeaders(),
         body: JSON.stringify(data)
@@ -46,7 +47,7 @@ export async function updateTemplate(id, data) {
 }
 
 export async function deleteTemplate(id) {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
+    const response = await fetch(`${CONFIG_API_URL}/${id}`, {
         method: 'DELETE',
         headers: getHeaders()
     });

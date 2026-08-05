@@ -1,6 +1,7 @@
+import { API_BASE_URL as CONFIG_API_URL } from '../config.js';
 import { API_BASE_URL, getHeaders } from './authService.js';
 
-const SNIPPET_API_URL = 'http://localhost:3000/api/v1/snippets';
+const SNIPPET_API_URL = `${CONFIG_API_URL}/snippets`;
 
 export async function fetchSnippets() {
     const response = await fetch(SNIPPET_API_URL, { headers: getHeaders() });

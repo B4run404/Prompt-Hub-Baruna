@@ -1,6 +1,7 @@
+import { API_BASE_URL as CONFIG_API_URL } from '../config.js';
 import { getToken } from './authService.js';
 
-const API_BASE_URL = 'http://localhost:3000/api/v1/tags';
+const API_BASE_URL = `${CONFIG_API_URL}/tags`;
 
 function getHeaders() {
     return {

@@ -1,3 +1,4 @@
+import { API_BASE_URL as CONFIG_API_URL } from '../../config.js';
 import { getToken } from '../../services/authService.js';
 
 export function initSearch() {
@@ -5,7 +6,7 @@ export function initSearch() {
     if (!searchInput) return;
 
     let debounceTimer;
-    const API_URL = 'http://localhost:3000/api/v1/search';
+    const API_URL = `${CONFIG_API_URL}/search`;
 
     // Create overlay container
     const searchOverlay = document.createElement('div');
