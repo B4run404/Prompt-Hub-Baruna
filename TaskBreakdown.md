@@ -299,7 +299,7 @@ Review Log & Penanganan Catch (Error)
 Task 1 (Selesai)
 Setup Variabel ENV Produksi (Supabase)
 
-Task 2
+Task 2 (Selesai)
 Deploy Database & Jalankan Migration di Production
 
 Task 3
