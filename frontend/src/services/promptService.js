@@ -45,3 +45,15 @@ export async function updatePrompt(id, data) {
     }
     return response.json();
 }
+
+// Fitur Soft Delete Prompt (Task 7)
+export async function deletePrompt(id) {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    });
+    if (!response.ok) {
+        throw new Error('Failed to delete prompt');
+    }
+    return response.json();
+}

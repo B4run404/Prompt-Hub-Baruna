@@ -39,7 +39,10 @@ export async function renderPromptList(container) {
                     <div class="clay-card" style="display: flex; flex-direction: column; gap: 12px;">
                         <div style="display: flex; justify-content: space-between;">
                             <h3 style="font-size: 1.1rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" title="${p.title}">${p.title}</h3>
-                            <button class="icon-btn btn-edit-prompt" data-id="${p.id}" data-title="${p.title}" data-content="${p.content.replace(/"/g, '&quot;')}" title="Edit Prompt" style="width: 32px; height: 32px;"><i class="fa-solid fa-pen"></i></button>
+                            <div style="display: flex; gap: 4px;">
+                                <button class="icon-btn btn-edit-prompt" data-id="${p.id}" data-title="${p.title}" data-content="${p.content.replace(/"/g, '&quot;')}" title="Edit Prompt" style="width: 32px; height: 32px;"><i class="fa-solid fa-pen"></i></button>
+                                <button class="icon-btn btn-delete-prompt text-danger" data-id="${p.id}" title="Delete Prompt" style="width: 32px; height: 32px;"><i class="fa-solid fa-trash"></i></button>
+                            </div>
                         </div>
                         <p style="color: var(--text-secondary); font-size: 0.9rem; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
                             ${p.content}
@@ -69,6 +72,22 @@ export async function renderPromptList(container) {
                 const title = btn.getAttribute('data-title');
                 const content = btn.getAttribute('data-content');
                 showPromptModal(container, { id, title, content });
+            });
+        });
+
+        const deleteBtns = document.querySelectorAll('.btn-delete-prompt');
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const id = btn.getAttribute('data-id');
+                if (confirm('Are you sure you want to move this prompt to trash?')) {
+                    try {
+                        const { deletePrompt } = await import('../../services/promptService.js');
+                        await deletePrompt(id);
+                        renderPromptList(container); // Refresh list
+                    } catch (err) {
+                        alert(err.message || 'Failed to delete prompt');
+                    }
+                }
             });
         });
 

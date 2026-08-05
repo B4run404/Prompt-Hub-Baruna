@@ -86,7 +86,7 @@ UI Form Tambah Prompt
 Task 6 (Selesai)
 Fitur Edit Prompt
 
-Task 7
+Task 7 (Selesai)
 Fitur Soft-Delete (Trash)
 
 Task 8
