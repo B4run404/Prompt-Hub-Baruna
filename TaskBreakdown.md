@@ -101,7 +101,7 @@ Database Schema (Kategori & Tag)
 Task 2 (Selesai)
 API Kategori & Tag
 
-Task 3
+Task 3 (Selesai)
 UI Filter berdasarkan Tag
 
 Task 4

@@ -1,4 +1,7 @@
 import { fetchPrompts } from '../../services/promptService.js';
+import { fetchTags } from '../../services/tagService.js';
+
+let currentTagFilter = null;
 
 export async function renderPromptList(container) {
     // 1. Loading State
@@ -11,9 +14,17 @@ export async function renderPromptList(container) {
 
     try {
         // 2. Fetch Data
-        const prompts = await fetchPrompts();
+        const [promptsData, tagsData] = await Promise.all([
+            fetchPrompts(),
+            fetchTags().catch(() => []) // Fallback if tags fail
+        ]);
 
-        // 3. Render Header & Button (Tombol Tambah untuk Task selanjutnya)
+        // Filter based on selected tag
+        const prompts = currentTagFilter 
+            ? promptsData.filter(p => p.tags && p.tags.some(t => t.id === currentTagFilter))
+            : promptsData;
+
+        // 3. Render Header & Button
         let html = `
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                 <h2 style="font-size: 1.8rem;"><i class="fa-solid fa-terminal text-primary"></i> Prompts Library</h2>
@@ -22,6 +33,21 @@ export async function renderPromptList(container) {
                 </button>
             </div>
         `;
+
+        // Render Tags Filter Bar
+        if (tagsData && tagsData.length > 0) {
+            let tagsHtml = `<div style="display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; align-items: center;">
+                <span style="font-size: 0.9rem; color: var(--text-secondary);"><i class="fa-solid fa-filter"></i> Filter:</span>
+                <button class="clay-btn btn-filter-tag" data-id="" style="padding: 4px 12px; font-size: 0.85rem; border-radius: 16px; ${currentTagFilter === null ? 'box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1), inset -2px -2px 5px rgba(255,255,255,0.5);' : ''}">All</button>`;
+                
+            tagsData.forEach(t => {
+                const isActive = currentTagFilter === t.id;
+                const activeStyle = isActive ? 'box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3); opacity: 0.9;' : '';
+                tagsHtml += `<button class="clay-btn btn-filter-tag" data-id="${t.id}" style="padding: 4px 12px; font-size: 0.85rem; border-radius: 16px; background-color: ${t.color}; color: white; ${activeStyle}">${t.name}</button>`;
+            });
+            tagsHtml += `</div>`;
+            html += tagsHtml;
+        }
 
         // 4. Render Data List
         if (prompts.length === 0) {
@@ -47,6 +73,9 @@ export async function renderPromptList(container) {
                         <p style="color: var(--text-secondary); font-size: 0.9rem; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
                             ${p.content}
                         </p>
+                        <div style="display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap;">
+                            ${p.tags ? p.tags.map(t => `<span style="background-color: ${t.color}; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem;">${t.name}</span>`).join('') : ''}
+                        </div>
                         <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
                             <span><i class="fa-solid fa-clock"></i> ${new Date(p.updated_at).toLocaleDateString()}</span>
                             ${p.is_favorite ? '<i class="fa-solid fa-star" style="color: #fbbf24;"></i>' : ''}
@@ -60,6 +89,15 @@ export async function renderPromptList(container) {
         container.innerHTML = html;
 
         // 5. Bind Events
+        const filterBtns = document.querySelectorAll('.btn-filter-tag');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const tagId = btn.getAttribute('data-id');
+                currentTagFilter = tagId ? tagId : null;
+                renderPromptList(container); // Re-render
+            });
+        });
+
         const btnAdd = document.getElementById('btn-add-prompt');
         if (btnAdd) {
             btnAdd.addEventListener('click', () => showPromptModal(container));

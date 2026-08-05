@@ -8,13 +8,15 @@ const create = async (data) => {
 const findManyByUserId = async (userId) => {
     return await prisma.prompt.findMany({
         where: { user_id: userId, is_deleted: false },
+        include: { tags: true, category: true },
         orderBy: { updated_at: 'desc' }
     });
 };
 
 const findByIdAndUserId = async (id, userId) => {
     return await prisma.prompt.findFirst({
-        where: { id, user_id: userId, is_deleted: false }
+        where: { id, user_id: userId, is_deleted: false },
+        include: { tags: true, category: true }
     });
 };
 
