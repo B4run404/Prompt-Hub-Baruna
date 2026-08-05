@@ -122,10 +122,10 @@ Markdown Preview Parser (Frontend)
 ---
 
 ### Sprint 7: Project CRUD
-Task 1
+Task 1 (Selesai)
 Database Schema (Projects)
 
-Task 2
+Task 2 (Selesai)
 CRUD API (Project)
 
 Task 3
