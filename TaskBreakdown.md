@@ -179,7 +179,7 @@ Menampilkan Recent Activity Table
 Task 1 (Selesai)
 Database Schema & API (Knowledge Base)
 
-Task 2
+Task 2 (Selesai)
 Integrasi Editor Teks/Markdown
 
 Task 3
