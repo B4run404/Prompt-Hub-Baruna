@@ -60,6 +60,22 @@ const getById = async (userId, assetId) => {
 const remove = async (userId, assetId) => {
     const existing = await assetRepo.findByIdAndUserId(assetId, userId);
     if (!existing) throw new Error('NOT_FOUND');
+    
+    // Delete file from Supabase if it's a real uploaded asset
+    if (supabase && existing.url && !existing.url.startsWith('mock://')) {
+        const bucketName = process.env.SUPABASE_BUCKET_NAME || 'assets';
+        const urlParts = existing.url.split('/');
+        const fileName = urlParts.pop(); // The last part of the URL is the filename
+        
+        if (fileName) {
+            // Fire and forget (or await it)
+            const { error } = await supabase.storage.from(bucketName).remove([fileName]);
+            if (error) {
+                console.error('Failed to delete file from Supabase:', error.message);
+            }
+        }
+    }
+    
     return await assetRepo.remove(assetId);
 };
 
