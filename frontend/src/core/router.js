@@ -36,6 +36,12 @@ export function loadPage(pageId) {
         }).catch(err => {
             pageContent.innerHTML = `<div class="clay-card"><h2 class="text-danger">Error Loading Module</h2><p>${err.message}</p></div>`;
         });
+    } else if (pageId === 'projects') {
+        import('../modules/projects/projectUI.js').then(module => {
+            module.renderProjectList(pageContent);
+        }).catch(err => {
+            pageContent.innerHTML = `<div class="clay-card"><h2 class="text-danger">Error Loading Module</h2><p>${err.message}</p></div>`;
+        });
     } else {
         // Fallback for undeveloped pages
         pageContent.innerHTML = `

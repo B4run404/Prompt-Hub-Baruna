@@ -128,7 +128,7 @@ Database Schema (Projects)
 Task 2 (Selesai)
 CRUD API (Project)
 
-Task 3
+Task 3 (Selesai)
 UI Project Grid/Board
 
 Task 4
