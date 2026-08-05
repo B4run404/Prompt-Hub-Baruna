@@ -197,7 +197,7 @@ Database Schema & API (Snippets)
 Task 2 (Selesai)
 Integrasi Library Syntax Highlighting (misal: Prism.js)
 
-Task 3
+Task 3 (Selesai)
 UI Form Tambah Code Snippet
 
 Task 4

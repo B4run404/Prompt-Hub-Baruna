@@ -54,6 +54,12 @@ export function loadPage(pageId) {
         }).catch(err => {
             pageContent.innerHTML = `<div class="clay-card"><h2 class="text-danger">Error Loading Module</h2><p>${err.message}</p></div>`;
         });
+    } else if (pageId === 'snippets') {
+        import('../modules/snippets/snippetUI.js').then(module => {
+            module.renderSnippetList(pageContent);
+        }).catch(err => {
+            pageContent.innerHTML = `<div class="clay-card"><h2 class="text-danger">Error Loading Module</h2><p>${err.message}</p></div>`;
+        });
     } else {
         // Fallback for undeveloped pages
         pageContent.innerHTML = `
