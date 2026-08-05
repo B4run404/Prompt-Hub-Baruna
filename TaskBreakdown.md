@@ -191,7 +191,7 @@ UI Dokumen Viewer
 ---
 
 ### Sprint 11: Snippet Manager
-Task 1
+Task 1 (Selesai)
 Database Schema & API (Snippets)
 
 Task 2
