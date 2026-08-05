@@ -53,25 +53,25 @@ Integrasi Frontend Fetch Login & Simpan Token
 ---
 
 ### Sprint 4: App Shell & Layouting
-Task 1
+Task 1 (Selesai)
 Struktur HTML & CSS Sidebar
 
-Task 2
+Task 2 (Selesai)
 Struktur HTML & CSS Header (Topbar)
 
-Task 3
+Task 3 (Selesai)
 Implementasi Vanilla SPA Routing
 
-Task 4
+Task 4 (Selesai)
 Logika Toggle Dark/Light Mode
 
 ---
 
 ### Sprint 5: Prompt CRUD (Core)
-Task 1
+Task 1 (Selesai)
 Database Schema untuk Prompt
 
-Task 2
+Task 2 (Selesai)
 CRUD API (Backend Route & Controller)
 
 Task 3
