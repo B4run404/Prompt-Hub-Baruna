@@ -89,7 +89,7 @@ Fitur Edit Prompt
 Task 7 (Selesai)
 Fitur Soft-Delete (Trash)
 
-Task 8
+Task 8 (Selesai)
 Testing & Error Handling (Prompt)
 
 ---
