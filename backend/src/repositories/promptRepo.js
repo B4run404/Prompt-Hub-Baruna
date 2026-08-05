@@ -35,10 +35,28 @@ const remove = async (id) => {
     });
 };
 
+const countVersions = async (promptId) => {
+    return await prisma.promptVersion.count({
+        where: { prompt_id: promptId }
+    });
+};
+
+const createVersion = async (promptId, content, versionNumber) => {
+    return await prisma.promptVersion.create({
+        data: {
+            prompt_id: promptId,
+            content,
+            version_number: versionNumber
+        }
+    });
+};
+
 module.exports = {
     create,
     findManyByUserId,
     findByIdAndUserId,
     update,
-    remove
+    remove,
+    countVersions,
+    createVersion
 };

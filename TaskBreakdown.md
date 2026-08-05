@@ -104,10 +104,10 @@ API Kategori & Tag
 Task 3 (Selesai)
 UI Filter berdasarkan Tag
 
-Task 4
+Task 4 (Selesai)
 Database Schema (Prompt Versions)
 
-Task 5
+Task 5 (Selesai)
 Trigger Simpan Versi Baru saat Update
 
 Task 6

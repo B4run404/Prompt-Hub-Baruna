@@ -19,14 +19,19 @@ const getById = async (userId, promptId) => {
     return await promptRepo.findByIdAndUserId(promptId, userId);
 };
 
-const update = async (userId, promptId, updateData) => {
-    // Pastikan prompt adalah milik user
-    const existingPrompt = await promptRepo.findByIdAndUserId(promptId, userId);
-    if (!existingPrompt) {
+const update = async (userId, id, updateData) => {
+    const existing = await promptRepo.findByIdAndUserId(id, userId);
+    if (!existing) {
         throw new Error('NOT_FOUND');
     }
-    
-    return await promptRepo.update(promptId, updateData);
+
+    // Trigger Simpan Versi Baru saat Update (Task 5)
+    if (updateData.content && existing.content !== updateData.content) {
+        const versionCount = await promptRepo.countVersions(id);
+        await promptRepo.createVersion(id, existing.content, versionCount + 1);
+    }
+
+    return await promptRepo.update(id, updateData);
 };
 
 const remove = async (userId, promptId) => {
