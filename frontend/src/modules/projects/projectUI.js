@@ -90,17 +90,33 @@ export async function renderProjectList(container) {
 
         const editBtns = document.querySelectorAll('.btn-edit-project');
         editBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                alert('Edit Project Modal will be implemented in Task 5');
+                const id = btn.getAttribute('data-id');
+                try {
+                    const { getProjectById } = await import('../../services/projectService.js');
+                    const response = await getProjectById(id);
+                    showProjectModal(container, response.data);
+                } catch (err) {
+                    alert(err.message || 'Failed to fetch project details');
+                }
             });
         });
 
         const deleteBtns = document.querySelectorAll('.btn-delete-project');
         deleteBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                alert('Delete Project will be implemented in Task 5');
+                const id = btn.getAttribute('data-id');
+                if (confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
+                    try {
+                        const { deleteProject } = await import('../../services/projectService.js');
+                        await deleteProject(id);
+                        renderProjectList(container); // Refresh list
+                    } catch (err) {
+                        alert(err.message || 'Failed to delete project');
+                    }
+                }
             });
         });
 

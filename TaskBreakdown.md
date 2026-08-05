@@ -134,7 +134,7 @@ UI Project Grid/Board
 Task 4 (Selesai)
 UI Form Tambah Project
 
-Task 5
+Task 5 (Selesai)
 Fitur Edit & Delete Project
 
 Task 6
