@@ -1,4 +1,4 @@
-import { getToken } from '../core/router.js';
+import { getToken } from './authService.js';
 
 const API_BASE_URL = 'http://localhost:3000/api/v1/templates';
 

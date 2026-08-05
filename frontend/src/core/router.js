@@ -66,6 +66,12 @@ export function loadPage(pageId) {
         }).catch(err => {
             pageContent.innerHTML = `<div class="clay-card"><h2 class="text-danger">Error Loading Module</h2><p>${err.message}</p></div>`;
         });
+    } else if (pageId === 'settings') {
+        import('../modules/settings/settingsUI.js').then(module => {
+            module.renderSettingsPage(pageContent);
+        }).catch(err => {
+            pageContent.innerHTML = `<div class="clay-card"><h2 class="text-danger">Error Loading Module</h2><p>${err.message}</p></div>`;
+        });
     } else if (pageId === 'assets') {
         import('../modules/assets/assetUI.js').then(module => {
             module.renderAssetGallery(pageContent);

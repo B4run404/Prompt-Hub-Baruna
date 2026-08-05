@@ -272,7 +272,7 @@ Skrip Export Database ke JSON (Backend)
 Task 2 (Selesai)
 Skrip Import JSON ke Database (Backend)
 
-Task 3
+Task 3 (Selesai)
 UI Halaman Settings - Tombol Export
 
 Task 4

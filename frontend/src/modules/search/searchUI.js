@@ -1,4 +1,4 @@
-import { getToken } from '../../core/router.js';
+import { getToken } from '../../services/authService.js';
 
 export function initSearch() {
     const searchInput = document.getElementById('global-search');
