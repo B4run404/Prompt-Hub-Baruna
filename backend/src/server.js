@@ -14,6 +14,7 @@ const snippetRoutes = require('./routes/snippetRoutes');
 const assetRoutes = require('./routes/assetRoutes');
 const templateRoutes = require('./routes/templateRoutes');
 const searchRoutes = require('./routes/searchRoutes');
+const backupRoutes = require('./routes/backupRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
@@ -46,6 +47,7 @@ app.use('/api/v1/snippets', snippetRoutes);
 app.use('/api/v1/assets', assetRoutes);
 app.use('/api/v1/templates', templateRoutes);
 app.use('/api/v1/search', searchRoutes);
+app.use('/api/v1/backup', backupRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {
