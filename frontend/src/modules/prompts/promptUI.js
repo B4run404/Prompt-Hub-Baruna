@@ -56,6 +56,12 @@ export async function renderPromptList(container) {
 
         container.innerHTML = html;
 
+        // 5. Bind Events
+        const btnAdd = document.getElementById('btn-add-prompt');
+        if (btnAdd) {
+            btnAdd.addEventListener('click', () => showAddPromptModal(container));
+        }
+
     } catch (error) {
         container.innerHTML = `
             <div class="clay-card">
@@ -64,4 +70,87 @@ export async function renderPromptList(container) {
             </div>
         `;
     }
+}
+
+// Fitur Form Tambah Prompt (Task 5)
+function showAddPromptModal(container) {
+    // Buat elemen overlay modal
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.zIndex = '1000';
+    overlay.style.backdropFilter = 'blur(4px)';
+    overlay.id = 'prompt-modal-overlay';
+
+    overlay.innerHTML = `
+        <div class="clay-card" style="width: 100%; max-width: 500px; padding: 32px; position: relative;">
+            <button id="btn-close-modal" class="icon-btn" style="position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            <h2 style="margin-bottom: 24px;"><i class="fa-solid fa-plus text-primary"></i> Create New Prompt</h2>
+            <form id="form-add-prompt">
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-secondary);">Title</label>
+                    <input type="text" id="prompt-title" class="clay-input" required placeholder="e.g. SEO Blog Post Generator">
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-secondary);">Content</label>
+                    <textarea id="prompt-content" class="clay-input" required placeholder="Write your prompt logic here..." style="min-height: 120px; resize: vertical;"></textarea>
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                    <button type="button" id="btn-cancel-modal" class="clay-btn" style="background-color: var(--clay-bg); color: var(--text-primary);">Cancel</button>
+                    <button type="submit" id="btn-submit-prompt" class="clay-btn">Save Prompt</button>
+                </div>
+                <div id="modal-error" style="color: var(--danger); margin-top: 12px; font-size: 0.9rem;"></div>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Event Bindings for Modal
+    const closeModal = () => document.body.removeChild(overlay);
+    
+    document.getElementById('btn-close-modal').addEventListener('click', closeModal);
+    document.getElementById('btn-cancel-modal').addEventListener('click', closeModal);
+    
+    // Klik di luar modal untuk menutup
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal();
+    });
+
+    // Handle Form Submit
+    const form = document.getElementById('form-add-prompt');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const title = document.getElementById('prompt-title').value;
+        const content = document.getElementById('prompt-content').value;
+        const errorDiv = document.getElementById('modal-error');
+        const submitBtn = document.getElementById('btn-submit-prompt');
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+        errorDiv.textContent = '';
+
+        try {
+            const { createPrompt } = await import('../../services/promptService.js');
+            await createPrompt({ title, content });
+            
+            // Sukses: tutup modal & render ulang list
+            closeModal();
+            renderPromptList(container);
+            
+        } catch (error) {
+            errorDiv.textContent = error.message || 'Failed to create prompt';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Save Prompt';
+        }
+    });
 }

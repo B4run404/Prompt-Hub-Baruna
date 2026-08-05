@@ -80,7 +80,7 @@ Service Layer Logic (Validasi & Akses)
 Task 4 (Selesai)
 UI Table/List Prompt (Frontend)
 
-Task 5
+Task 5 (Selesai)
 UI Form Tambah Prompt
 
 Task 6
