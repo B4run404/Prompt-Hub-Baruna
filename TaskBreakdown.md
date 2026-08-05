@@ -110,7 +110,7 @@ Database Schema (Prompt Versions)
 Task 5 (Selesai)
 Trigger Simpan Versi Baru saat Update
 
-Task 6
+Task 6 (Selesai)
 UI History Version Panel
 
 Task 7

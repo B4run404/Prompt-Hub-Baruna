@@ -139,9 +139,39 @@ export async function renderPromptList(container) {
     }
 }
 
-// Fitur Form Tambah & Edit Prompt (Task 5 & 6)
-function showPromptModal(container, existingPrompt = null) {
+// Fitur Form Tambah & Edit Prompt (Task 5 & 6 & Version History Task 6)
+async function showPromptModal(container, existingPrompt = null) {
     const isEdit = !!existingPrompt;
+    let fullPrompt = null;
+    let historyHtml = '';
+
+    if (isEdit) {
+        try {
+            const { getPromptById } = await import('../../services/promptService.js');
+            fullPrompt = await getPromptById(existingPrompt.id);
+            
+            if (fullPrompt.versions && fullPrompt.versions.length > 0) {
+                historyHtml = `
+                    <div style="margin-bottom: 24px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-secondary);">Version History</label>
+                        <div style="max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 8px;">
+                            ${fullPrompt.versions.map(v => `
+                                <div style="display: flex; justify-content: space-between; align-items: center; background: var(--clay-bg); padding: 8px 12px; border-radius: 8px; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);">
+                                    <div>
+                                        <div style="font-size: 0.85rem; font-weight: bold; color: var(--text-primary);">Version ${v.version_number}</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary);">${new Date(v.created_at).toLocaleString()}</div>
+                                    </div>
+                                    <button type="button" class="clay-btn btn-restore-version" data-content="${v.content.replace(/"/g, '&quot;')}" style="padding: 4px 12px; font-size: 0.8rem; border-radius: 8px;">Load</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        } catch (err) {
+            console.error('Failed to load prompt details', err);
+        }
+    }
     
     // Buat elemen overlay modal
     const overlay = document.createElement('div');
@@ -176,6 +206,7 @@ function showPromptModal(container, existingPrompt = null) {
                     <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-secondary);">Content</label>
                     <textarea id="prompt-content" class="clay-input" required placeholder="Write your prompt logic here..." style="min-height: 120px; resize: vertical;">${isEdit ? existingPrompt.content : ''}</textarea>
                 </div>
+                ${historyHtml}
                 <div style="display: flex; gap: 12px; justify-content: flex-end;">
                     <button type="button" id="btn-cancel-modal" class="clay-btn" style="background-color: var(--clay-bg); color: var(--text-primary);">Cancel</button>
                     <button type="submit" id="btn-submit-prompt" class="clay-btn">${isEdit ? 'Update Prompt' : 'Save Prompt'}</button>
@@ -186,6 +217,15 @@ function showPromptModal(container, existingPrompt = null) {
     `;
 
     document.body.appendChild(overlay);
+
+    // Bind Load Version Buttons
+    const restoreBtns = document.querySelectorAll('.btn-restore-version');
+    restoreBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const content = btn.getAttribute('data-content');
+            document.getElementById('prompt-content').value = content;
+        });
+    });
 
     // Event Bindings for Modal
     const closeModal = () => document.body.removeChild(overlay);

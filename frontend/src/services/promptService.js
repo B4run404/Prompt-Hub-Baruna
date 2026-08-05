@@ -10,12 +10,17 @@ const getHeaders = () => {
 };
 
 export async function fetchPrompts() {
-    const response = await fetch(API_BASE_URL, {
-        method: 'GET',
-        headers: getHeaders()
-    });
+    const response = await fetch(API_BASE_URL, { headers: getHeaders() });
     if (!response.ok) {
         throw new Error('Failed to fetch prompts');
+    }
+    return response.json();
+}
+
+export async function getPromptById(id) {
+    const response = await fetch(`${API_BASE_URL}/${id}`, { headers: getHeaders() });
+    if (!response.ok) {
+        throw new Error('Failed to fetch prompt details');
     }
     return response.json();
 }
