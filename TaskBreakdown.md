@@ -194,7 +194,7 @@ UI Dokumen Viewer
 Task 1 (Selesai)
 Database Schema & API (Snippets)
 
-Task 2
+Task 2 (Selesai)
 Integrasi Library Syntax Highlighting (misal: Prism.js)
 
 Task 3
