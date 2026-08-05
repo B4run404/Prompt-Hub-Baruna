@@ -1,46 +1,27 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const prisma = require('../config/db');
+const authService = require('../services/authService');
 
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Email and password are required' });
-        }
-
-        const user = await prisma.user.findUnique({
-            where: { email }
-        });
-
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password_hash);
         
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-
-        const token = jwt.sign(
-            { id: user.id, email: user.email, role: user.role },
-            process.env.JWT_SECRET || 'fallback_secret_key',
-            { expiresIn: '24h' }
-        );
-
-        res.json({
+        // Controller mendelegasikan logika bisnis ke Service Layer
+        const result = await authService.login(email, password);
+        
+        res.status(200).json({
             message: 'Login successful',
-            token,
-            user: {
-                id: user.id,
-                email: user.email,
-                role: user.role
-            }
+            ...result
         });
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('Login error:', error.message);
+        
+        // Mapping error dari service ke HTTP Status Code
+        if (error.message === 'EMAIL_PASSWORD_REQUIRED') {
+            return res.status(400).json({ message: 'Email and password are required' });
+        }
+        if (error.message === 'INVALID_CREDENTIALS') {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+        
         res.status(500).json({ message: 'Internal server error' });
     }
 };

@@ -62,7 +62,7 @@ Seeding Data Dummy
 ---
 
 ### Sprint 3: Authentication
-Task 1
+Task 1 (Selesai)
 API Login & Hash Password (Bcrypt)
 
 Task 2
