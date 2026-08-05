@@ -53,6 +53,16 @@ model Prompt {
   user_id     String
   user        User      @relation(fields: [user_id], references: [id])
   tags        Tag[]
+  versions    PromptVersion[]
+}
+
+model PromptVersion {
+  id             String   @id @default(uuid())
+  prompt_id      String
+  prompt         Prompt   @relation(fields: [prompt_id], references: [id])
+  content        String
+  version_number Int
+  created_at     DateTime @default(now())
 }
 
 model Category {
