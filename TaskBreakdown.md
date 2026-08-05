@@ -143,7 +143,7 @@ Testing (Project API)
 ---
 
 ### Sprint 8: Project Relations
-Task 1
+Task 1 (Selesai)
 API Relasi Project-Prompt
 
 Task 2

@@ -19,4 +19,37 @@ const remove = async (userId, projectId) => {
     if (!existing) throw new Error('NOT_FOUND');
     return await projectRepo.remove(projectId);
 };
-module.exports = { create, getAll, getById, update, remove };
+
+// Task 1: Relasi Project-Prompt
+const promptRepo = require('../repositories/promptRepo');
+
+const addPrompt = async (userId, projectId, promptId) => {
+    // 1. Verify Project belongs to User
+    const project = await projectRepo.findByIdAndUserId(projectId, userId);
+    if (!project) throw new Error('PROJECT_NOT_FOUND');
+    
+    // 2. Verify Prompt belongs to User
+    const prompt = await promptRepo.findByIdAndUserId(promptId, userId);
+    if (!prompt) throw new Error('PROMPT_NOT_FOUND');
+
+    return await projectRepo.addPromptToProject(projectId, promptId);
+};
+
+const removePrompt = async (userId, projectId, promptId) => {
+    // 1. Verify Project belongs to User
+    const project = await projectRepo.findByIdAndUserId(projectId, userId);
+    if (!project) throw new Error('PROJECT_NOT_FOUND');
+    
+    // 2. Verify Prompt belongs to User
+    const prompt = await promptRepo.findByIdAndUserId(promptId, userId);
+    if (!prompt) throw new Error('PROMPT_NOT_FOUND');
+
+    // Pastikan prompt benar-benar di dalam project ini
+    if (prompt.project_id !== projectId) {
+        throw new Error('PROMPT_NOT_IN_PROJECT');
+    }
+
+    return await projectRepo.removePromptFromProject(promptId);
+};
+
+module.exports = { create, getAll, getById, update, remove, addPrompt, removePrompt };
