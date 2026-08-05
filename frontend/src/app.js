@@ -19,4 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Inisialisasi Logika Autentikasi
     initAuth();
+
+    // 5. Inisialisasi Fitur Global Search
+    import('./modules/search/searchUI.js').then(module => {
+        module.initSearch();
+    });
 });

@@ -251,16 +251,16 @@ Fitur Edit Template
 ---
 
 ### Sprint 15: Global Search Engine
-Task 1
+Task 1 (Selesai)
 Query Pencarian Gabungan (PostgreSQL FTS)
 
-Task 2
+Task 2 (Selesai)
 Endpoint API /search (Multi-table)
 
-Task 3
+Task 3 (Selesai)
 UI Search Input & Event Listener (Debounce)
 
-Task 4
+Task 4 (Selesai)
 UI Search Results Overlay
 
 ---
