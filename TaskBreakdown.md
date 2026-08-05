@@ -281,7 +281,7 @@ UI Modal Upload File untuk Restore
 ---
 
 ### Sprint 17: Security & Refactoring
-Task 1
+Task 1 (Selesai)
 Validasi Joi/Zod di semua Route POST/PUT
 
 Task 2

@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const projectController = require('../controllers/projectController');
-const authMiddleware = require('../middleware/authMiddleware');
+const authMiddleware = require('../middlewares/auth');
+const { validate, projectSchema } = require('../middlewares/validator');
 
 router.use(authMiddleware);
-router.post('/', projectController.createProject);
+
+router.post('/', validate(projectSchema), projectController.createProject);
 router.get('/', projectController.getProjects);
 router.get('/:id', projectController.getProjectById);
-router.put('/:id', projectController.updateProject);
+router.put('/:id', validate(projectSchema), projectController.updateProject);
 router.delete('/:id', projectController.deleteProject);
 
 // Task 1: API Relasi Project-Prompt
