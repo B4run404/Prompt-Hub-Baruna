@@ -39,7 +39,7 @@ export async function renderPromptList(container) {
                     <div class="clay-card" style="display: flex; flex-direction: column; gap: 12px;">
                         <div style="display: flex; justify-content: space-between;">
                             <h3 style="font-size: 1.1rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" title="${p.title}">${p.title}</h3>
-                            <button class="icon-btn" title="Options" style="width: 32px; height: 32px;"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                            <button class="icon-btn btn-edit-prompt" data-id="${p.id}" data-title="${p.title}" data-content="${p.content.replace(/"/g, '&quot;')}" title="Edit Prompt" style="width: 32px; height: 32px;"><i class="fa-solid fa-pen"></i></button>
                         </div>
                         <p style="color: var(--text-secondary); font-size: 0.9rem; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
                             ${p.content}
@@ -59,8 +59,18 @@ export async function renderPromptList(container) {
         // 5. Bind Events
         const btnAdd = document.getElementById('btn-add-prompt');
         if (btnAdd) {
-            btnAdd.addEventListener('click', () => showAddPromptModal(container));
+            btnAdd.addEventListener('click', () => showPromptModal(container));
         }
+
+        const editBtns = document.querySelectorAll('.btn-edit-prompt');
+        editBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = btn.getAttribute('data-id');
+                const title = btn.getAttribute('data-title');
+                const content = btn.getAttribute('data-content');
+                showPromptModal(container, { id, title, content });
+            });
+        });
 
     } catch (error) {
         container.innerHTML = `
@@ -72,8 +82,10 @@ export async function renderPromptList(container) {
     }
 }
 
-// Fitur Form Tambah Prompt (Task 5)
-function showAddPromptModal(container) {
+// Fitur Form Tambah & Edit Prompt (Task 5 & 6)
+function showPromptModal(container, existingPrompt = null) {
+    const isEdit = !!existingPrompt;
+    
     // Buat elemen overlay modal
     const overlay = document.createElement('div');
     overlay.style.position = 'fixed';
@@ -94,19 +106,22 @@ function showAddPromptModal(container) {
             <button id="btn-close-modal" class="icon-btn" style="position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;">
                 <i class="fa-solid fa-times"></i>
             </button>
-            <h2 style="margin-bottom: 24px;"><i class="fa-solid fa-plus text-primary"></i> Create New Prompt</h2>
+            <h2 style="margin-bottom: 24px;">
+                <i class="fa-solid ${isEdit ? 'fa-pen' : 'fa-plus'} text-primary"></i> 
+                ${isEdit ? 'Edit Prompt' : 'Create New Prompt'}
+            </h2>
             <form id="form-add-prompt">
                 <div style="margin-bottom: 16px;">
                     <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-secondary);">Title</label>
-                    <input type="text" id="prompt-title" class="clay-input" required placeholder="e.g. SEO Blog Post Generator">
+                    <input type="text" id="prompt-title" class="clay-input" required placeholder="e.g. SEO Blog Post Generator" value="${isEdit ? existingPrompt.title : ''}">
                 </div>
                 <div style="margin-bottom: 24px;">
                     <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-secondary);">Content</label>
-                    <textarea id="prompt-content" class="clay-input" required placeholder="Write your prompt logic here..." style="min-height: 120px; resize: vertical;"></textarea>
+                    <textarea id="prompt-content" class="clay-input" required placeholder="Write your prompt logic here..." style="min-height: 120px; resize: vertical;">${isEdit ? existingPrompt.content : ''}</textarea>
                 </div>
                 <div style="display: flex; gap: 12px; justify-content: flex-end;">
                     <button type="button" id="btn-cancel-modal" class="clay-btn" style="background-color: var(--clay-bg); color: var(--text-primary);">Cancel</button>
-                    <button type="submit" id="btn-submit-prompt" class="clay-btn">Save Prompt</button>
+                    <button type="submit" id="btn-submit-prompt" class="clay-btn">${isEdit ? 'Update Prompt' : 'Save Prompt'}</button>
                 </div>
                 <div id="modal-error" style="color: var(--danger); margin-top: 12px; font-size: 0.9rem;"></div>
             </form>
@@ -140,17 +155,22 @@ function showAddPromptModal(container) {
         errorDiv.textContent = '';
 
         try {
-            const { createPrompt } = await import('../../services/promptService.js');
-            await createPrompt({ title, content });
+            const promptService = await import('../../services/promptService.js');
+            
+            if (isEdit) {
+                await promptService.updatePrompt(existingPrompt.id, { title, content });
+            } else {
+                await promptService.createPrompt({ title, content });
+            }
             
             // Sukses: tutup modal & render ulang list
             closeModal();
             renderPromptList(container);
             
         } catch (error) {
-            errorDiv.textContent = error.message || 'Failed to create prompt';
+            errorDiv.textContent = error.message || 'Failed to process request';
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Save Prompt';
+            submitBtn.textContent = isEdit ? 'Update Prompt' : 'Save Prompt';
         }
     });
 }

@@ -83,7 +83,7 @@ UI Table/List Prompt (Frontend)
 Task 5 (Selesai)
 UI Form Tambah Prompt
 
-Task 6
+Task 6 (Selesai)
 Fitur Edit Prompt
 
 Task 7

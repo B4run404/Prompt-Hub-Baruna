@@ -32,3 +32,16 @@ export async function createPrompt(data) {
     }
     return response.json();
 }
+
+// Fitur Edit Prompt (Task 6)
+export async function updatePrompt(id, data) {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(),
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+        throw new Error('Failed to update prompt');
+    }
+    return response.json();
+}
