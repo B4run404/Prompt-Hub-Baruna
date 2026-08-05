@@ -42,14 +42,14 @@ model Prompt {
   content     String
   ai_provider String?
   is_favorite Boolean   @default(false)
-  is_deleted  Boolean   @default(false)
+  is_deleted  Boolean   @default(false) // Untuk fitur trash
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
   
-  project_id  String?
-  project     Project?  @relation(fields: [project_id], references: [id])
   category_id String?
   category    Category? @relation(fields: [category_id], references: [id])
+  project_id  String?
+  project     Project?  @relation(fields: [project_id], references: [id])
   user_id     String
   user        User      @relation(fields: [user_id], references: [id])
   tags        Tag[]
