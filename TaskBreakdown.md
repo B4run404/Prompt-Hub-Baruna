@@ -74,7 +74,7 @@ Database Schema untuk Prompt
 Task 2 (Selesai)
 CRUD API (Backend Route & Controller)
 
-Task 3
+Task 3 (Selesai)
 Service Layer Logic (Validasi & Akses)
 
 Task 4

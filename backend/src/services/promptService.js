@@ -1,23 +1,42 @@
-// Stub service - Akan diimplementasikan secara penuh pada Task 3
+const promptRepo = require('../repositories/promptRepo');
 
 const create = async (userId, data) => {
-    throw new Error('Not implemented yet');
+    if (!data.title || !data.content) {
+        throw new Error('Title and content are required');
+    }
+    
+    return await promptRepo.create({
+        ...data,
+        user_id: userId
+    });
 };
 
 const getAll = async (userId) => {
-    throw new Error('Not implemented yet');
+    return await promptRepo.findManyByUserId(userId);
 };
 
 const getById = async (userId, promptId) => {
-    throw new Error('Not implemented yet');
+    return await promptRepo.findByIdAndUserId(promptId, userId);
 };
 
 const update = async (userId, promptId, updateData) => {
-    throw new Error('Not implemented yet');
+    // Pastikan prompt adalah milik user
+    const existingPrompt = await promptRepo.findByIdAndUserId(promptId, userId);
+    if (!existingPrompt) {
+        throw new Error('NOT_FOUND');
+    }
+    
+    return await promptRepo.update(promptId, updateData);
 };
 
 const remove = async (userId, promptId) => {
-    throw new Error('Not implemented yet');
+    // Pastikan prompt adalah milik user
+    const existingPrompt = await promptRepo.findByIdAndUserId(promptId, userId);
+    if (!existingPrompt) {
+        throw new Error('NOT_FOUND');
+    }
+    
+    return await promptRepo.remove(promptId);
 };
 
 module.exports = {
