@@ -182,7 +182,7 @@ Database Schema & API (Knowledge Base)
 Task 2 (Selesai)
 Integrasi Editor Teks/Markdown
 
-Task 3
+Task 3 (Selesai)
 UI Dokumen List
 
 Task 4

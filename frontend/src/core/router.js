@@ -48,6 +48,12 @@ export function loadPage(pageId) {
         }).catch(err => {
             pageContent.innerHTML = `<div class="clay-card"><h2 class="text-danger">Error Loading Module</h2><p>${err.message}</p></div>`;
         });
+    } else if (pageId === 'knowledge') {
+        import('../modules/knowledge/knowledgeUI.js').then(module => {
+            module.renderKnowledgeBase(pageContent);
+        }).catch(err => {
+            pageContent.innerHTML = `<div class="clay-card"><h2 class="text-danger">Error Loading Module</h2><p>${err.message}</p></div>`;
+        });
     } else {
         // Fallback for undeveloped pages
         pageContent.innerHTML = `
