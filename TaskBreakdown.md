@@ -302,8 +302,8 @@ Setup Variabel ENV Produksi (Supabase)
 Task 2 (Selesai)
 Deploy Database & Jalankan Migration di Production
 
-Task 3
-Deploy Backend (misal: Render/Railway)
+Task 3 (Selesai)
+Deploy Backend (Vercel Serverless)
 
-Task 4
+Task 4 (Selesai)
 Deploy Frontend (Vercel) & Test E2E
