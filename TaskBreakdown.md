@@ -137,7 +137,7 @@ UI Form Tambah Project
 Task 5 (Selesai)
 Fitur Edit & Delete Project
 
-Task 6
+Task 6 (Selesai)
 Testing (Project API)
 
 ---
