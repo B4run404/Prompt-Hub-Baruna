@@ -66,6 +66,7 @@ export async function renderPromptList(container) {
                         <div style="display: flex; justify-content: space-between;">
                             <h3 style="font-size: 1.1rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" title="${p.title}">${p.title}</h3>
                             <div style="display: flex; gap: 4px;">
+                                <button class="icon-btn btn-copy-prompt" data-content="${p.content.replace(/"/g, '&quot;')}" title="Copy Prompt" style="width: 32px; height: 32px; color: var(--primary);"><i class="fa-solid fa-copy"></i></button>
                                 <button class="icon-btn btn-edit-prompt" data-id="${p.id}" data-title="${p.title}" data-content="${p.content.replace(/"/g, '&quot;')}" title="Edit Prompt" style="width: 32px; height: 32px;"><i class="fa-solid fa-pen"></i></button>
                                 <button class="icon-btn btn-delete-prompt text-danger" data-id="${p.id}" title="Delete Prompt" style="width: 32px; height: 32px;"><i class="fa-solid fa-trash"></i></button>
                             </div>
@@ -89,6 +90,25 @@ export async function renderPromptList(container) {
         container.innerHTML = html;
 
         // 5. Bind Events
+        const copyBtns = document.querySelectorAll('.btn-copy-prompt');
+        copyBtns.forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const content = btn.getAttribute('data-content');
+                try {
+                    await navigator.clipboard.writeText(content);
+                    const icon = btn.querySelector('i');
+                    icon.className = 'fa-solid fa-check';
+                    btn.style.color = '#10b981'; // Green color for success
+                    setTimeout(() => {
+                        icon.className = 'fa-solid fa-copy';
+                        btn.style.color = 'var(--primary)';
+                    }, 2000);
+                } catch (err) {
+                    alert('Failed to copy. Your browser might not support clipboard operations.');
+                }
+            });
+        });
+
         const filterBtns = document.querySelectorAll('.btn-filter-tag');
         filterBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {

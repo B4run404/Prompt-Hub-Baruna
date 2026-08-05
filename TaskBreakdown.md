@@ -113,7 +113,7 @@ Trigger Simpan Versi Baru saat Update
 Task 6 (Selesai)
 UI History Version Panel
 
-Task 7
+Task 7 (Selesai)
 Fitur Copy to Clipboard
 
 Task 8
