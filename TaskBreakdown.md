@@ -152,7 +152,7 @@ UI Halaman Detail Project
 Task 3 (Selesai)
 Komponen List Prompt di Dalam Project
 
-Task 4
+Task 4 (Selesai)
 Perhitungan Progress Bar (Backend/Frontend)
 
 ---

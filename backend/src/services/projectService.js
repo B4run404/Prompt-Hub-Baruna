@@ -1,7 +1,21 @@
 const projectRepo = require('../repositories/projectRepo');
 
+// Task 4: Perhitungan Progress Bar
+const calculateProgressAndStatus = (data) => {
+    if (data.status === 'Completed') {
+        data.progress = 100;
+    } else if (data.progress >= 100) {
+        data.progress = 100;
+        data.status = 'Completed';
+    } else if (data.progress < 0) {
+        data.progress = 0;
+    }
+    return data;
+};
+
 const create = async (userId, data) => {
-    return await projectRepo.create({ ...data, user_id: userId });
+    const computedData = calculateProgressAndStatus({ ...data });
+    return await projectRepo.create({ ...computedData, user_id: userId });
 };
 const getAll = async (userId) => projectRepo.findManyByUserId(userId);
 const getById = async (userId, projectId) => {
@@ -12,7 +26,8 @@ const getById = async (userId, projectId) => {
 const update = async (userId, projectId, updateData) => {
     const existing = await projectRepo.findByIdAndUserId(projectId, userId);
     if (!existing) throw new Error('NOT_FOUND');
-    return await projectRepo.update(projectId, updateData);
+    const computedData = calculateProgressAndStatus({ ...updateData });
+    return await projectRepo.update(projectId, computedData);
 };
 const remove = async (userId, projectId) => {
     const existing = await projectRepo.findByIdAndUserId(projectId, userId);
