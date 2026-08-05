@@ -287,10 +287,10 @@ Validasi Joi/Zod di semua Route POST/PUT
 Task 2 (Selesai)
 Implementasi CORS ketat & Rate Limiting
 
-Task 3
+Task 3 (Selesai)
 Pembersihan Variabel / File Tidak Terpakai
 
-Task 4
+Task 4 (Selesai)
 Review Log & Penanganan Catch (Error)
 
 ---

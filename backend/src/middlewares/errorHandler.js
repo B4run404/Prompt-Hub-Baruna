@@ -1,5 +1,9 @@
 const errorHandler = (err, req, res, next) => {
-    console.error(`[Error] ${err.message}`);
+    const timestamp = new Date().toISOString();
+    console.error(`[Error][${timestamp}] ${err.name}: ${err.message}`);
+    if (process.env.NODE_ENV === 'development') {
+        console.error(err.stack);
+    }
     
     // Default error status
     let statusCode = 500;
@@ -17,7 +21,7 @@ const errorHandler = (err, req, res, next) => {
     }
 
     res.status(statusCode).json({
-        success: false,
+        status: 'error',
         message,
         // Tampilkan stack trace hanya jika sedang dalam mode development
         stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
