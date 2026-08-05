@@ -30,7 +30,13 @@ export function loadPage(pageId) {
     });
 
     // Dynamic Route Handling
-    if (pageId === 'prompts') {
+    if (pageId === 'dashboard') {
+        import('../modules/dashboard/dashboardUI.js').then(module => {
+            module.renderDashboard(pageContent);
+        }).catch(err => {
+            pageContent.innerHTML = `<div class="clay-card"><h2 class="text-danger">Error Loading Module</h2><p>${err.message}</p></div>`;
+        });
+    } else if (pageId === 'prompts') {
         import('../modules/prompts/promptUI.js').then(module => {
             module.renderPromptList(pageContent);
         }).catch(err => {

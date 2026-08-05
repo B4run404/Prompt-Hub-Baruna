@@ -167,7 +167,7 @@ UI Tombol Star/Favorite
 Task 3 (Selesai)
 API Statistik Dashboard (Total Row)
 
-Task 4
+Task 4 (Selesai)
 UI Widget Dashboard (Statistik)
 
 Task 5
