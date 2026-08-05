@@ -16,6 +16,8 @@ model User {
   
   projects      Project[]
   prompts       Prompt[]
+  categories    Category[]
+  tags          Tag[]
 }
 
 model Project {
@@ -46,6 +48,32 @@ model Prompt {
   
   project_id  String?
   project     Project?  @relation(fields: [project_id], references: [id])
+  category_id String?
+  category    Category? @relation(fields: [category_id], references: [id])
   user_id     String
   user        User      @relation(fields: [user_id], references: [id])
+  tags        Tag[]
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  user_id     String
+  user        User      @relation(fields: [user_id], references: [id])
+  prompts     Prompt[]
+}
+
+model Tag {
+  id          String    @id @default(uuid())
+  name        String
+  color       String?   @default("#7e57c2")
+  created_at  DateTime  @default(now())
+  
+  user_id     String
+  user        User      @relation(fields: [user_id], references: [id])
+  prompts     Prompt[]
 }
