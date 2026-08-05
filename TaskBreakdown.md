@@ -206,7 +206,7 @@ UI View Code Snippet (dengan tombol Copy)
 ---
 
 ### Sprint 12: Asset Manager UI & Logic
-Task 1
+Task 1 (Selesai)
 Database Schema (Assets)
 
 Task 2
