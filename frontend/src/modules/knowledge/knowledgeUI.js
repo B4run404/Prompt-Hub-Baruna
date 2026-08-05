@@ -25,7 +25,7 @@ export async function renderKnowledgeBase(container) {
                 const starColor = doc.is_favorite ? 'color: #f59e0b;' : 'color: var(--text-secondary);';
                 
                 html += `
-                    <div class="clay-card doc-card" data-id="${doc.id}" style="display: flex; flex-direction: column; gap: 12px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div class="clay-card doc-card" data-id="${doc.id}" data-title="${doc.title}" data-content="${doc.content.replace(/"/g, '&quot;')}" style="display: flex; flex-direction: column; gap: 12px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <h3 style="font-size: 1.2rem; margin-bottom: 4px;" title="${doc.title}">${doc.title}</h3>
                             <div style="display: flex; gap: 4px;">
@@ -69,6 +69,21 @@ export async function renderKnowledgeBase(container) {
                             <button type="submit" class="btn btn-primary clay-btn">Save Document</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        `;
+
+        // Modal Form for Viewer
+        html += `
+            <div id="viewer-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+                <div class="clay-card" style="width: 95%; max-width: 900px; max-height: 90vh; display: flex; flex-direction: column; background: var(--surface);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px;">
+                        <h2 id="viewer-modal-title" style="font-size: 1.5rem;">Document Title</h2>
+                        <button id="close-viewer-modal" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div id="viewer-modal-content" class="markdown-body" style="flex-grow: 1; overflow-y: auto; padding-right: 12px; font-size: 1rem; line-height: 1.6;">
+                        <!-- Rendered Markdown will go here -->
+                    </div>
                 </div>
             </div>
         `;
@@ -199,5 +214,36 @@ function bindEvents(container) {
         } catch (err) {
             alert('Failed to save document: ' + err.message);
         }
+    });
+
+    // Viewer Logic
+    const viewerModal = document.getElementById('viewer-modal');
+    const closeViewerBtn = document.getElementById('close-viewer-modal');
+    const viewerTitle = document.getElementById('viewer-modal-title');
+    const viewerContent = document.getElementById('viewer-modal-content');
+    
+    document.querySelectorAll('.doc-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Prevent opening if clicking on action buttons
+            if (e.target.closest('button')) return;
+            
+            const title = card.getAttribute('data-title');
+            const content = card.getAttribute('data-content');
+            
+            viewerTitle.textContent = title;
+            // Parse markdown to HTML
+            if (typeof marked !== 'undefined') {
+                viewerContent.innerHTML = marked.parse(content);
+            } else {
+                viewerContent.textContent = content; // Fallback
+            }
+            
+            viewerModal.style.display = 'flex';
+        });
+    });
+
+    closeViewerBtn.addEventListener('click', () => {
+        viewerModal.style.display = 'none';
+        viewerContent.innerHTML = '';
     });
 }

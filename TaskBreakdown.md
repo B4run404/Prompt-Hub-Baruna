@@ -185,7 +185,7 @@ Integrasi Editor Teks/Markdown
 Task 3 (Selesai)
 UI Dokumen List
 
-Task 4
+Task 4 (Selesai)
 UI Dokumen Viewer
 
 ---
