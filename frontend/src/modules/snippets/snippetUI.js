@@ -91,6 +91,27 @@ export async function renderSnippetList(container) {
             </div>
         `;
 
+        // Modal Form for Viewer
+        html += `
+            <div id="snippet-viewer-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+                <div class="clay-card" style="width: 95%; max-width: 900px; max-height: 90vh; display: flex; flex-direction: column; background: var(--surface);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <h2 id="snippet-viewer-title" style="font-size: 1.5rem; margin: 0;">Snippet Title</h2>
+                            <span id="snippet-viewer-language" style="padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; background: rgba(139, 92, 246, 0.2); color: #8b5cf6; font-weight: 600; text-transform: uppercase;">LANG</span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button id="copy-snippet-btn" class="btn clay-btn" style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 6px 12px;"><i class="fa-solid fa-copy"></i> Copy</button>
+                            <button id="close-snippet-viewer-modal" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                    <div style="flex-grow: 1; overflow-y: auto; padding-right: 12px; position: relative;">
+                        <pre style="margin: 0; padding: 16px; border-radius: 8px; font-size: 0.95rem; background: #1d1f21;"><code id="snippet-viewer-code" class="language-plaintext"></code></pre>
+                    </div>
+                </div>
+            </div>
+        `;
+
         container.innerHTML = html;
 
         // Apply Prism syntax highlighting
@@ -201,5 +222,59 @@ function bindEvents(container) {
         } catch (err) {
             alert('Failed to save snippet: ' + err.message);
         }
+    });
+
+    // Viewer Logic
+    const viewerModal = document.getElementById('snippet-viewer-modal');
+    const closeViewerBtn = document.getElementById('close-snippet-viewer-modal');
+    const viewerTitle = document.getElementById('snippet-viewer-title');
+    const viewerLanguage = document.getElementById('snippet-viewer-language');
+    const viewerCode = document.getElementById('snippet-viewer-code');
+    const copyBtn = document.getElementById('copy-snippet-btn');
+    
+    let currentRawCode = "";
+
+    document.querySelectorAll('.snippet-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            // Prevent opening if clicking on action buttons
+            if (e.target.closest('button')) return;
+            
+            const title = card.getAttribute('data-title');
+            const code = card.getAttribute('data-code');
+            const language = card.getAttribute('data-language');
+            
+            currentRawCode = code;
+            viewerTitle.textContent = title;
+            viewerLanguage.textContent = language;
+            viewerCode.className = `language-${language}`;
+            viewerCode.textContent = code;
+            
+            // Re-highlight the newly added code block
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightElement(viewerCode);
+            }
+            
+            viewerModal.style.display = 'flex';
+        });
+    });
+
+    closeViewerBtn.addEventListener('click', () => {
+        viewerModal.style.display = 'none';
+        viewerCode.textContent = '';
+        currentRawCode = "";
+        copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
+    });
+
+    copyBtn.addEventListener('click', () => {
+        if (!currentRawCode) return;
+        navigator.clipboard.writeText(currentRawCode).then(() => {
+            copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+            setTimeout(() => {
+                copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            alert('Failed to copy to clipboard.');
+        });
     });
 }

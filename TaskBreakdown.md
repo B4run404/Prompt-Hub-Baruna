@@ -200,7 +200,7 @@ Integrasi Library Syntax Highlighting (misal: Prism.js)
 Task 3 (Selesai)
 UI Form Tambah Code Snippet
 
-Task 4
+Task 4 (Selesai)
 UI View Code Snippet (dengan tombol Copy)
 
 ---
