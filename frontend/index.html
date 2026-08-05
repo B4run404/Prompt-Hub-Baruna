@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptHub - Personal AI Workspace</title>
+    <link rel="stylesheet" href="./src/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen">
+        <div class="login-container clay-card">
+            <div class="login-header">
+                <i class="fa-solid fa-cube text-primary"></i>
+                <h2>PromptHub</h2>
+            </div>
+            <p class="subtitle">Personal AI Workspace</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="clay-input" required placeholder="admin@prompthub.local">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="clay-input" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-primary clay-btn">
+                    <i class="fa-solid fa-right-to-bracket"></i> Login
+                </button>
+            </form>
+            <div id="login-error" class="error-text"></div>
+        </div>
+    </div>
+
+    <!-- App Shell (Main Application) -->
+    <div id="app-shell" class="screen hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar clay-panel">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-cube text-primary"></i>
+                <h2>PromptHub</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="#prompts" class="nav-item"><i class="fa-solid fa-terminal"></i> Prompts</a>
+                <a href="#projects" class="nav-item"><i class="fa-solid fa-folder-tree"></i> Projects</a>
+                <a href="#knowledge" class="nav-item"><i class="fa-solid fa-book-open"></i> Knowledge Base</a>
+                <a href="#assets" class="nav-item"><i class="fa-solid fa-image"></i> Assets</a>
+                <a href="#snippets" class="nav-item"><i class="fa-solid fa-code"></i> Snippets</a>
+                <a href="#templates" class="nav-item"><i class="fa-solid fa-layer-group"></i> Templates</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="nav-item text-danger"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="topbar clay-panel">
+                <div class="search-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="global-search" class="clay-input" placeholder="Search globally (Ctrl+K)...">
+                </div>
+                <div class="topbar-actions">
+                    <button id="theme-toggle" class="icon-btn clay-btn" title="Toggle Theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <div class="user-profile clay-btn">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=8b5cf6&color=fff" alt="Admin" class="avatar">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic Page Content -->
+            <div id="page-content" class="page-container">
+                <!-- Content will be injected here via app.js -->
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="./src/app.js"></script>
+</body>
+</html>
