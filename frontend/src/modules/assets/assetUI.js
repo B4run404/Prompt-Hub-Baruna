@@ -10,8 +10,11 @@ export async function renderAssetGallery(container) {
             fetchProjects()
         ]);
         
+        // Extract array from standard response wrapper if needed
+        const projectsArray = Array.isArray(projects) ? projects : (projects.data || []);
+        
         // Store projects globally for the modal
-        window.currentProjects = projects || [];
+        window.currentProjects = projectsArray;
 
         let html = `
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
