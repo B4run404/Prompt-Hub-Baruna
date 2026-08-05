@@ -5,17 +5,65 @@ Berikut adalah rincian tugas-tugas kecil untuk setiap Sprint. Setiap *Task* dira
 ---
 
 ### Sprint 1: Project Setup & Architecture
-Task 1
+Task 1 (Selesai)
 Inisialisasi Monorepo & Git Repo
 
-Task 2
+Task 2 (Selesai)
 Setup Node.js & Dependencies Backend
 
-Task 3
+Task 3 (Selesai)
 Setup Vanilla JS & CSS Frontend
 
-Task 4
+Task 4 (Selesai)
 Konfigurasi Environment Variables (.env)
+
+---
+
+### Sprint 2: Database & ORM Setup
+Task 1 (Selesai)
+Koneksi Prisma ORM ke PostgreSQL
+
+Task 2 (Selesai)
+Schema Inti (Users & Projects)
+
+Task 3 (Selesai)
+Database Migration
+
+Task 4 (Selesai)
+Seeding Data Dummy
+
+---
+
+### Sprint 3: Authentication
+Task 1 (Selesai)
+API Login & Hash Password (Bcrypt)
+
+Task 2 (Selesai)
+Pembuatan JWT Token
+
+Task 3 (Selesai)
+Auth Middleware (Proteksi Rute Backend)
+
+Task 4 (Selesai)
+UI Login Page (Claymorphism)
+
+Task 5 (Selesai)
+Integrasi Frontend Fetch Login & Simpan Token
+
+---
+
+### Sprint 4: App Shell & Layouting
+Task 1
+Struktur HTML & CSS Sidebar
+
+Task 2
+Struktur HTML & CSS Header (Topbar)
+
+Task 3
+Implementasi Vanilla SPA Routing
+
+Task 4
+Logika Toggle Dark/Light Mode
 
 ---
 
@@ -45,56 +93,6 @@ Task 8
 Testing & Error Handling (Prompt)
 
 ---
-
-### Sprint 2: Database & ORM Setup
-Task 1 (Selesai)
-Koneksi Prisma ORM ke PostgreSQL
-
-Task 2 (Selesai)
-Schema Inti (Users & Projects)
-
-Task 3 (Selesai)
-Database Migration
-
-Task 4 (Selesai)
-Seeding Data Dummy
-
----
-
-### Sprint 3: Authentication
-Task 1 (Selesai)
-API Login & Hash Password (Bcrypt)
-
-Task 2
-Pembuatan JWT Token
-
-Task 3
-Auth Middleware (Proteksi Rute Backend)
-
-Task 4
-UI Login Page (Claymorphism)
-
-Task 5
-Integrasi Frontend Fetch Login & Simpan Token
-
----
-
-### Sprint 4: App Shell & Layouting
-Task 1
-Struktur HTML & CSS Sidebar
-
-Task 2
-Struktur HTML & CSS Header (Topbar)
-
-Task 3
-Implementasi Vanilla SPA Routing
-
-Task 4
-Logika Toggle Dark/Light Mode
-
----
-
-*(Catatan: Sprint 5 telah dijabarkan di atas sebagai referensi prioritas utama untuk manajemen prompt)*
 
 ### Sprint 6: Prompt Metadata & Versioning
 Task 1
