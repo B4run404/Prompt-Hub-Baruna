@@ -80,11 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = document.getElementById('password').value;
             
             // Temporary mock authentication since backend is not yet running
-            if (email === 'admin@prompthub.local' && password === 'admin') {
+            if (email === 'Baruna404' && password === 'bagusbae123') {
                 localStorage.setItem('prompthub_token', 'mock_jwt_token');
                 checkAuth();
             } else {
-                loginError.textContent = 'Invalid email or password. Use admin@prompthub.local / admin';
+                loginError.textContent = 'Invalid ID or password. Use Baruna404 / bagusbae123';
             }
             
             // TODO: Replace with real API call
