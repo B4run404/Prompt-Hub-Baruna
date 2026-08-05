@@ -18,6 +18,7 @@ model User {
   prompts       Prompt[]
   categories    Category[]
   tags          Tag[]
+  documents     Document[]
 }
 
 model Project {
@@ -87,4 +88,16 @@ model Tag {
   user_id     String
   user        User      @relation(fields: [user_id], references: [id])
   prompts     Prompt[]
+}
+
+model Document {
+  id          String    @id @default(uuid())
+  title       String
+  content     String    
+  is_favorite Boolean   @default(false)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  
+  user_id     String
+  user        User      @relation(fields: [user_id], references: [id])
 }

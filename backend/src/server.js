@@ -9,6 +9,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const tagRoutes = require('./routes/tagRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const documentRoutes = require('./routes/documentRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
@@ -36,6 +37,7 @@ app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/tags', tagRoutes);
 app.use('/api/v1/projects', projectRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
+app.use('/api/v1/documents', documentRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {

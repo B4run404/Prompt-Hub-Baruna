@@ -176,7 +176,7 @@ Menampilkan Recent Activity Table
 ---
 
 ### Sprint 10: Knowledge Base
-Task 1
+Task 1 (Selesai)
 Database Schema & API (Knowledge Base)
 
 Task 2
