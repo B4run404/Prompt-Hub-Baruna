@@ -10,9 +10,15 @@ export async function renderSettingsPage(container) {
                 <p style="color: var(--text-muted); margin: 8px 0 20px 0; font-size: 0.95rem;">
                     Download all your workspace data including Prompts, Projects, Templates, Snippets, and Tags into a single JSON file. Keep this file safe.
                 </p>
-                <button id="btn-export-backup" class="btn btn-primary clay-btn">
-                    <i class="fa-solid fa-download"></i> Download Backup (.json)
-                </button>
+                <div style="display: flex; gap: 12px; margin-top: 16px;">
+                    <button id="btn-export-backup" class="btn btn-primary clay-btn">
+                        <i class="fa-solid fa-download"></i> Download Backup (.json)
+                    </button>
+                    <button id="btn-restore-backup" class="btn clay-btn" style="background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.3);">
+                        <i class="fa-solid fa-upload"></i> Restore from Backup
+                    </button>
+                    <input type="file" id="input-restore-file" accept=".json" style="display: none;">
+                </div>
             </div>
         </div>
     `;
@@ -67,6 +73,59 @@ export async function renderSettingsPage(container) {
         } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;
+        }
+    });
+
+    // Restore Backup Logic
+    const btnRestore = document.getElementById('btn-restore-backup');
+    const inputRestore = document.getElementById('input-restore-file');
+
+    btnRestore.addEventListener('click', () => {
+        const confirmRestore = confirm("PERINGATAN: Melakukan Restore akan MENGHAPUS SEMUA DATA ANDA SAAT INI dan menggantinya dengan isi file backup. Apakah Anda yakin ingin melanjutkan?");
+        if (confirmRestore) {
+            inputRestore.click();
+        }
+    });
+
+    inputRestore.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const originalText = btnRestore.innerHTML;
+        btnRestore.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Restoring...`;
+        btnRestore.disabled = true;
+
+        try {
+            const { getToken } = await import('../../services/authService.js');
+            const token = getToken();
+
+            const formData = new FormData();
+            formData.append('backup', file);
+
+            const response = await fetch('http://localhost:3000/api/v1/backup/import', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(result.message || 'Gagal memulihkan data');
+            }
+
+            alert('✅ Restore berhasil! Halaman akan dimuat ulang untuk menampilkan data terbaru.');
+            window.location.reload();
+            
+        } catch (err) {
+            alert(`❌ Error Restore: ${err.message}`);
+            // Reset input so they can select the same file again if it failed
+            inputRestore.value = '';
+        } finally {
+            btnRestore.innerHTML = originalText;
+            btnRestore.disabled = false;
         }
     });
 }
