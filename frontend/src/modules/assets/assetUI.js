@@ -126,10 +126,10 @@ function bindEvents(container) {
         card.addEventListener('click', (e) => {
             if (e.target.closest('.btn-delete-asset')) return;
             const url = card.getAttribute('data-url');
-            if (url && url !== '#') {
+            if (url && !url.startsWith('mock://') && url !== '#') {
                 window.open(url, '_blank');
             } else {
-                alert('URL is not available (mock data).');
+                alert('Aset belum diunggah ke Cloud Storage. Silakan konfigurasikan kunci Supabase di .env Anda.');
             }
         });
     });

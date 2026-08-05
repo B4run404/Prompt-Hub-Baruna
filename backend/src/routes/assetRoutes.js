@@ -4,8 +4,11 @@ const multer = require('multer');
 const assetController = require('../controllers/assetController');
 const authMiddleware = require('../middlewares/auth');
 
-// Multer memory storage configuration
-const upload = multer({ storage: multer.memoryStorage() });
+// Multer memory storage configuration with 10MB limit
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 10 * 1024 * 1024 } // 10 MB limit
+});
 
 router.use(authMiddleware);
 
