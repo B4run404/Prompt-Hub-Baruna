@@ -21,6 +21,9 @@ const login = async (req, res) => {
         if (error.message === 'INVALID_CREDENTIALS') {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
+        if (error.message === 'JWT_SECRET_NOT_CONFIGURED') {
+            return res.status(500).json({ message: 'Server configuration error' });
+        }
         
         res.status(500).json({ message: 'Internal server error' });
     }

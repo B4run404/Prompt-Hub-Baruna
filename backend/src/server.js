@@ -1,18 +1,30 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 
 const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
-app.use(cors());
+// Security & Middlewares
+app.use(cors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:5500', // Batasi hanya dari domain frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
+// Rate Limiter untuk melindungi dari Brute Force
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 menit
+    max: 100, // Maksimal 100 request per IP dalam 15 menit
+    message: { message: 'Too many requests from this IP, please try again later.' }
+});
+
 // Routes
-app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/auth', authLimiter, authRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {

@@ -316,6 +316,21 @@ body {
     color: var(--text-secondary);
 }
 
+/* Responsive Design */
+@media (max-width: 768px) {
+    .app-shell {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        display: none; /* In future sprint, add hamburger menu to toggle */
+    }
+    
+    .topbar {
+        padding: 1rem;
+    }
+}
+
 .search-bar .clay-input {
     padding-left: 48px;
     border-radius: 40px;

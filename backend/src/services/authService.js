@@ -29,9 +29,13 @@ class AuthService {
         }
 
         // Generate JWT Token
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET_NOT_CONFIGURED');
+        }
+
         const token = jwt.sign(
             { id: user.id, email: user.email, role: user.role },
-            process.env.JWT_SECRET || 'fallback_secret_key',
+            process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
 
