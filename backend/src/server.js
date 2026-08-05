@@ -72,7 +72,12 @@ app.get('/health', (req, res) => {
 // Centralized Error Handling (Harus berada di urutan paling bawah)
 app.use(errorHandler);
 
-// Start Server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Start Server (hanya dijalankan jika tidak di lingkungan Vercel)
+if (process.env.NODE_ENV !== 'production' || process.env.RENDER) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
+
+// Export app untuk Vercel Serverless Functions
+module.exports = app;
