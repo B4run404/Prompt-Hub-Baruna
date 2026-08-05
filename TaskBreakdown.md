@@ -296,7 +296,7 @@ Review Log & Penanganan Catch (Error)
 ---
 
 ### Sprint 18: Production Deployment
-Task 1
+Task 1 (Selesai)
 Setup Variabel ENV Produksi (Supabase)
 
 Task 2
