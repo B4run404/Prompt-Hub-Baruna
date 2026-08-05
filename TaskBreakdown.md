@@ -221,16 +221,16 @@ Logika Relasi Asset dengan Project
 ---
 
 ### Sprint 13: Cloud Storage Integration
-Task 1
+Task 1 (Selesai)
 Konfigurasi Supabase Storage API
 
-Task 2
+Task 2 (Selesai)
 Backend Route untuk Upload Multipart/form-data
 
-Task 3
+Task 3 (Selesai)
 Service Upload File & Return Public URL
 
-Task 4
+Task 4 (Selesai)
 Frontend Progress Bar Upload
 
 ---

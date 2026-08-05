@@ -1,7 +1,50 @@
 const assetRepo = require('../repositories/assetRepo');
+const supabase = require('../config/supabaseClient');
+const path = require('path');
 
-const create = async (userId, data) => {
-    return await assetRepo.create({ ...data, user_id: userId });
+const create = async (userId, file, projectId) => {
+    let fileUrl = '';
+    const bucketName = process.env.SUPABASE_BUCKET_NAME || 'assets';
+    
+    if (supabase) {
+        // Create unique filename to prevent overwrite
+        const ext = path.extname(file.originalname);
+        const fileName = `${userId}_${Date.now()}${ext}`;
+        
+        const { data, error } = await supabase
+            .storage
+            .from(bucketName)
+            .upload(fileName, file.buffer, {
+                contentType: file.mimetype,
+                upsert: false
+            });
+            
+        if (error) {
+            throw new Error(`Supabase Upload Error: ${error.message}`);
+        }
+        
+        // Get public URL
+        const { data: publicUrlData } = supabase
+            .storage
+            .from(bucketName)
+            .getPublicUrl(fileName);
+            
+        fileUrl = publicUrlData.publicUrl;
+    } else {
+        // Mock fallback for missing Supabase Config
+        fileUrl = `mock://local/assets/${file.originalname}`;
+    }
+
+    const assetData = {
+        filename: file.originalname,
+        file_type: file.mimetype,
+        size: file.size,
+        url: fileUrl,
+        user_id: userId,
+        project_id: projectId ? projectId : null
+    };
+
+    return await assetRepo.create(assetData);
 };
 
 const getAll = async (userId) => {

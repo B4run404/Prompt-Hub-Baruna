@@ -2,8 +2,12 @@ const assetService = require('../services/assetService');
 
 const createAsset = async (req, res, next) => {
     try {
-        // Since we are mocking upload for Sprint 12, we expect url, filename, file_type, size in body
-        const newAsset = await assetService.create(req.user.id, req.body);
+        if (!req.file) {
+            return res.status(400).json({ status: 'error', message: 'No file uploaded' });
+        }
+        
+        // Pass file buffer and metadata to service
+        const newAsset = await assetService.create(req.user.id, req.file, req.body.project_id);
         res.status(201).json({ status: 'success', data: newAsset });
     } catch (err) {
         next(err);

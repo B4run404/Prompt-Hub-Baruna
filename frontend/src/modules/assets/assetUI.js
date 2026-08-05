@@ -179,32 +179,60 @@ function bindEvents(container) {
         if (!file) return;
 
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+        
+        // Progress bar element
+        submitBtn.style.display = 'none';
+        const progressContainer = document.createElement('div');
+        progressContainer.style.width = '100%';
+        progressContainer.style.height = '36px';
+        progressContainer.style.background = 'var(--surface)';
+        progressContainer.style.border = '1px solid var(--glass-border)';
+        progressContainer.style.borderRadius = '8px';
+        progressContainer.style.position = 'relative';
+        progressContainer.style.overflow = 'hidden';
+        
+        const progressBar = document.createElement('div');
+        progressBar.style.height = '100%';
+        progressBar.style.width = '0%';
+        progressBar.style.background = 'var(--primary)';
+        progressBar.style.transition = 'width 0.2s ease';
+        
+        const progressText = document.createElement('div');
+        progressText.style.position = 'absolute';
+        progressText.style.top = '50%';
+        progressText.style.left = '50%';
+        progressText.style.transform = 'translate(-50%, -50%)';
+        progressText.style.color = '#fff';
+        progressText.style.fontWeight = 'bold';
+        progressText.style.fontSize = '0.9rem';
+        progressText.style.textShadow = '0 1px 2px rgba(0,0,0,0.5)';
+        progressText.textContent = '0%';
+        
+        progressContainer.appendChild(progressBar);
+        progressContainer.appendChild(progressText);
+        
+        const formGroup = submitBtn.parentElement;
+        formGroup.insertBefore(progressContainer, submitBtn);
+        cancelUploadBtn.disabled = true;
 
         try {
-            // Mock upload logic for Sprint 12
-            // We use URL.createObjectURL to generate a temporary local URL for the file
-            const mockUrl = URL.createObjectURL(file);
-            
             const projectId = document.getElementById('asset-project-select').value;
-
-            const assetData = {
-                filename: file.name,
-                url: mockUrl,
-                file_type: file.type || 'application/octet-stream',
-                size: file.size,
-                project_id: projectId ? projectId : null
-            };
-
-            const { createAsset } = await import('../../services/assetService.js');
-            await createAsset(assetData);
+            const { createAssetWithProgress } = await import('../../services/assetService.js');
+            
+            await createAssetWithProgress(file, projectId, (percent) => {
+                progressBar.style.width = `${percent}%`;
+                progressText.textContent = `${percent}%`;
+            });
             
             closeModal();
             renderAssetGallery(container);
         } catch (err) {
             alert('Failed to upload asset: ' + err.message);
+        } finally {
+            progressContainer.remove();
+            submitBtn.style.display = 'inline-block';
             submitBtn.disabled = false;
-            submitBtn.innerHTML = 'Upload File';
+            cancelUploadBtn.disabled = false;
         }
     });
 }
