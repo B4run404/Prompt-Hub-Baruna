@@ -44,10 +44,18 @@ const remove = async (userId, promptId) => {
     return await promptRepo.remove(promptId);
 };
 
+// Sprint 9 Task 1: Toggle Favorite
+const toggleFavorite = async (userId, promptId) => {
+    const existing = await promptRepo.findByIdAndUserId(promptId, userId);
+    if (!existing) throw new Error('NOT_FOUND');
+    return await promptRepo.toggleFavorite(promptId, !existing.is_favorite);
+};
+
 module.exports = {
     create,
     getAll,
     getById,
     update,
-    remove
+    remove,
+    toggleFavorite
 };

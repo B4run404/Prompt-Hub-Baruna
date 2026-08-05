@@ -63,4 +63,14 @@ const removePromptFromProject = async (req, res, next) => {
     }
 };
 
-module.exports = { createProject, getProjects, getProjectById, updateProject, deleteProject, addPromptToProject, removePromptFromProject };
+const toggleFavorite = async (req, res, next) => {
+    try {
+        const result = await projectService.toggleFavorite(req.user.id, req.params.id);
+        res.status(200).json({ status: 'success', data: result });
+    } catch (err) {
+        if (err.message === 'NOT_FOUND') return res.status(404).json({ status: 'error', message: 'Project not found' });
+        next(err);
+    }
+};
+
+module.exports = { createProject, getProjects, getProjectById, updateProject, deleteProject, addPromptToProject, removePromptFromProject, toggleFavorite };

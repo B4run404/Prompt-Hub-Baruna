@@ -51,6 +51,13 @@ const createVersion = async (promptId, content, versionNumber) => {
     });
 };
 
+const toggleFavorite = async (id, isFavorite) => {
+    return await prisma.prompt.update({
+        where: { id },
+        data: { is_favorite: isFavorite }
+    });
+};
+
 module.exports = {
     create,
     findManyByUserId,
@@ -58,5 +65,6 @@ module.exports = {
     update,
     remove,
     countVersions,
-    createVersion
+    createVersion,
+    toggleFavorite
 };

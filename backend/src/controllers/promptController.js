@@ -62,10 +62,21 @@ const deletePrompt = async (req, res, next) => {
     }
 };
 
+const toggleFavorite = async (req, res, next) => {
+    try {
+        const result = await promptService.toggleFavorite(req.user.id, req.params.id);
+        res.status(200).json({ status: 'success', data: result });
+    } catch (err) {
+        if (err.message === 'NOT_FOUND') return res.status(404).json({ status: 'error', message: 'Prompt not found' });
+        next(err);
+    }
+};
+
 module.exports = {
     createPrompt,
     getAllPrompts,
     getPromptById,
     updatePrompt,
-    deletePrompt
+    deletePrompt,
+    toggleFavorite
 };

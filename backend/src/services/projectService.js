@@ -67,4 +67,10 @@ const removePrompt = async (userId, projectId, promptId) => {
     return await projectRepo.removePromptFromProject(promptId);
 };
 
-module.exports = { create, getAll, getById, update, remove, addPrompt, removePrompt };
+const toggleFavorite = async (userId, projectId) => {
+    const existing = await projectRepo.findByIdAndUserId(projectId, userId);
+    if (!existing) throw new Error('NOT_FOUND');
+    return await projectRepo.toggleFavorite(projectId, !existing.is_favorite);
+};
+
+module.exports = { create, getAll, getById, update, remove, addPrompt, removePrompt, toggleFavorite };

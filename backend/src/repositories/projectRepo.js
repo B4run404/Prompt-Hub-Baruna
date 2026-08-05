@@ -24,4 +24,6 @@ const removePromptFromProject = async (promptId) => {
     });
 };
 
-module.exports = { create, findManyByUserId, findByIdAndUserId, update, remove, addPromptToProject, removePromptFromProject };
+const toggleFavorite = async (id, isFavorite) => prisma.project.update({ where: { id }, data: { is_favorite: isFavorite } });
+
+module.exports = { create, findManyByUserId, findByIdAndUserId, update, remove, addPromptToProject, removePromptFromProject, toggleFavorite };

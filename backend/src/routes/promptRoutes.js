@@ -21,4 +21,8 @@ router.put('/:id', promptController.updatePrompt);
 // Delete
 router.delete('/:id', promptController.deletePrompt);
 
+
+// Sprint 9 Task 1: Toggle Favorite
+router.patch('/:id/favorite', promptController.toggleFavorite);
+
 module.exports = router;

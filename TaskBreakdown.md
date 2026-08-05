@@ -158,7 +158,7 @@ Perhitungan Progress Bar (Backend/Frontend)
 ---
 
 ### Sprint 9: Dashboard & Favorites
-Task 1
+Task 1 (Selesai)
 API Toggle Favorite (Prompt/Project)
 
 Task 2
