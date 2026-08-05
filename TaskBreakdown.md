@@ -284,7 +284,7 @@ UI Modal Upload File untuk Restore
 Task 1 (Selesai)
 Validasi Joi/Zod di semua Route POST/PUT
 
-Task 2
+Task 2 (Selesai)
 Implementasi CORS ketat & Rate Limiting
 
 Task 3

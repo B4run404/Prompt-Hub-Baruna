@@ -22,18 +22,33 @@ const PORT = process.env.PORT || 3000;
 
 // Security & Middlewares
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5500', // Batasi hanya dari domain frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:3000'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true // Mengizinkan cookie jika diperlukan nantinya
 }));
 app.use(express.json());
 
-// Rate Limiter untuk melindungi dari Brute Force
+// Global Rate Limiter (Umum)
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 menit
+    max: 500, // Maksimal 500 request per IP per 15 menit
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { status: 'error', message: 'Terlalu banyak request dari IP ini, coba lagi nanti.' }
+});
+
+// Auth Rate Limiter (Ketat untuk Brute Force Login/Register)
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 menit
-    max: 100, // Maksimal 100 request per IP dalam 15 menit
-    message: { message: 'Too many requests from this IP, please try again later.' }
+    max: 20, // Maksimal 20 request per IP untuk /auth
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { status: 'error', message: 'Terlalu banyak percobaan autentikasi, coba lagi nanti.' }
 });
+
+// Terapkan global limiter ke semua /api/
+app.use('/api/', globalLimiter);
 
 // Mount Routes
 app.use('/api/v1/auth', authLimiter, authRoutes);
