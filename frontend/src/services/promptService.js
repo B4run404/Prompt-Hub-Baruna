@@ -62,3 +62,21 @@ export async function deletePrompt(id) {
     }
     return response.json();
 }
+
+export async function hardDeletePrompt(id) {
+    const response = await fetch(`${API_BASE_URL}/${id}/hard`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    });
+    if (!response.ok) throw new Error('Failed to hard delete prompt');
+    return response.json();
+}
+
+export async function toggleFavoritePrompt(id) {
+    const response = await fetch(`${API_BASE_URL}/${id}/favorite`, {
+        method: 'PATCH',
+        headers: getHeaders()
+    });
+    if (!response.ok) throw new Error('Failed to toggle favorite');
+    return response.json();
+}

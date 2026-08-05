@@ -161,7 +161,7 @@ Perhitungan Progress Bar (Backend/Frontend)
 Task 1 (Selesai)
 API Toggle Favorite (Prompt/Project)
 
-Task 2
+Task 2 (Selesai)
 UI Tombol Star/Favorite
 
 Task 3

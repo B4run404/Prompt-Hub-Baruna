@@ -61,12 +61,16 @@ export async function renderPromptList(container) {
         } else {
             html += `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">`;
             prompts.forEach(p => {
+                const starIcon = p.is_favorite ? 'fa-solid fa-star' : 'fa-regular fa-star';
+                const starColor = p.is_favorite ? 'color: #f59e0b;' : 'color: var(--text-secondary);';
+                
                 html += `
                     <div class="clay-card" style="display: flex; flex-direction: column; gap: 12px;">
-                        <div style="display: flex; justify-content: space-between;">
-                            <h3 style="font-size: 1.1rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" title="${p.title}">${p.title}</h3>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <h3 style="font-size: 1.2rem; margin-bottom: 4px;" title="${p.title}">${p.title}</h3>
                             <div style="display: flex; gap: 4px;">
-                                <button class="icon-btn btn-copy-prompt" data-content="${p.content.replace(/"/g, '&quot;')}" title="Copy Prompt" style="width: 32px; height: 32px; color: var(--primary);"><i class="fa-solid fa-copy"></i></button>
+                                <button class="icon-btn btn-favorite-prompt" data-id="${p.id}" title="Toggle Favorite" style="width: 32px; height: 32px; ${starColor}"><i class="${starIcon}"></i></button>
+                                <button class="icon-btn btn-copy-prompt" data-content="${p.content.replace(/"/g, '&quot;')}" title="Copy to Clipboard" style="width: 32px; height: 32px; color: var(--primary);"><i class="fa-regular fa-copy"></i></button>
                                 <button class="icon-btn btn-edit-prompt" data-id="${p.id}" data-title="${p.title}" data-content="${p.content.replace(/"/g, '&quot;')}" title="Edit Prompt" style="width: 32px; height: 32px;"><i class="fa-solid fa-pen"></i></button>
                                 <button class="icon-btn btn-delete-prompt text-danger" data-id="${p.id}" title="Delete Prompt" style="width: 32px; height: 32px;"><i class="fa-solid fa-trash"></i></button>
                             </div>
@@ -79,7 +83,6 @@ export async function renderPromptList(container) {
                         </div>
                         <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
                             <span><i class="fa-solid fa-clock"></i> ${new Date(p.updated_at).toLocaleDateString()}</span>
-                            ${p.is_favorite ? '<i class="fa-solid fa-star" style="color: #fbbf24;"></i>' : ''}
                         </div>
                     </div>
                 `;
@@ -98,13 +101,27 @@ export async function renderPromptList(container) {
                     await navigator.clipboard.writeText(content);
                     const icon = btn.querySelector('i');
                     icon.className = 'fa-solid fa-check';
-                    btn.style.color = '#10b981'; // Green color for success
+                    btn.style.color = '#10b981';
                     setTimeout(() => {
-                        icon.className = 'fa-solid fa-copy';
+                        icon.className = 'fa-regular fa-copy';
                         btn.style.color = 'var(--primary)';
                     }, 2000);
                 } catch (err) {
-                    alert('Failed to copy. Your browser might not support clipboard operations.');
+                    alert('Failed to copy.');
+                }
+            });
+        });
+
+        const favBtns = document.querySelectorAll('.btn-favorite-prompt');
+        favBtns.forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = btn.getAttribute('data-id');
+                try {
+                    const { toggleFavoritePrompt } = await import('../../services/promptService.js');
+                    await toggleFavoritePrompt(id);
+                    renderPromptList(container);
+                } catch (err) {
+                    alert(err.message || 'Failed to toggle favorite');
                 }
             });
         });
@@ -114,7 +131,7 @@ export async function renderPromptList(container) {
             btn.addEventListener('click', (e) => {
                 const tagId = btn.getAttribute('data-id');
                 currentTagFilter = tagId ? tagId : null;
-                renderPromptList(container); // Re-render
+                renderPromptList(container);
             });
         });
 
@@ -141,7 +158,7 @@ export async function renderPromptList(container) {
                     try {
                         const { deletePrompt } = await import('../../services/promptService.js');
                         await deletePrompt(id);
-                        renderPromptList(container); // Refresh list
+                        renderPromptList(container);
                     } catch (err) {
                         alert(err.message || 'Failed to delete prompt');
                     }

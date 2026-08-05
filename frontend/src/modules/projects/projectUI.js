@@ -39,11 +39,15 @@ export async function renderProjectList(container) {
                 const statusColor = p.status === 'Completed' ? 'var(--success, #10b981)' : 'var(--primary)';
                 const progressWidth = p.progress ? p.progress : 0;
                 
+                const starIcon = p.is_favorite ? 'fa-solid fa-star' : 'fa-regular fa-star';
+                const starColor = p.is_favorite ? 'color: #f59e0b;' : 'color: var(--text-secondary);';
+
                 html += `
                     <div class="clay-card project-card" data-id="${p.id}" style="display: flex; flex-direction: column; gap: 12px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <h3 style="font-size: 1.2rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; margin-bottom: 4px;" title="${p.name}">${p.name}</h3>
                             <div style="display: flex; gap: 4px;">
+                                <button class="icon-btn btn-favorite-project" data-id="${p.id}" title="Toggle Favorite" style="width: 32px; height: 32px; ${starColor}"><i class="${starIcon}"></i></button>
                                 <button class="icon-btn btn-edit-project" data-id="${p.id}" title="Edit Project" style="width: 32px; height: 32px;"><i class="fa-solid fa-pen"></i></button>
                                 <button class="icon-btn btn-delete-project text-danger" data-id="${p.id}" title="Delete Project" style="width: 32px; height: 32px;"><i class="fa-solid fa-trash"></i></button>
                             </div>
@@ -116,6 +120,21 @@ export async function renderProjectList(container) {
                     } catch (err) {
                         alert(err.message || 'Failed to delete project');
                     }
+                }
+            });
+        });
+
+        const favBtns = document.querySelectorAll('.btn-favorite-project');
+        favBtns.forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                try {
+                    const { toggleFavoriteProject } = await import('../../services/projectService.js');
+                    await toggleFavoriteProject(id);
+                    renderProjectList(container);
+                } catch (err) {
+                    alert(err.message || 'Failed to toggle favorite');
                 }
             });
         });

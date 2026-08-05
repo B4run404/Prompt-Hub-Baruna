@@ -67,3 +67,12 @@ export async function removePrompt(projectId, promptId) {
     if (!response.ok) throw new Error('Failed to remove prompt from project');
     return response.json();
 }
+
+export async function toggleFavoriteProject(id) {
+    const response = await fetch(`${API_BASE_URL}/${id}/favorite`, {
+        method: 'PATCH',
+        headers: getHeaders()
+    });
+    if (!response.ok) throw new Error('Failed to toggle favorite project');
+    return response.json();
+}
