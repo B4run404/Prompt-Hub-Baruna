@@ -95,10 +95,10 @@ Testing & Error Handling (Prompt)
 ---
 
 ### Sprint 6: Prompt Metadata & Versioning
-Task 1
+Task 1 (Selesai)
 Database Schema (Kategori & Tag)
 
-Task 2
+Task 2 (Selesai)
 API Kategori & Tag
 
 Task 3

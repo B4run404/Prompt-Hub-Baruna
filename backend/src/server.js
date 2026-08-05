@@ -5,6 +5,8 @@ const rateLimit = require('express-rate-limit');
 
 const authRoutes = require('./routes/authRoutes');
 const promptRoutes = require('./routes/promptRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+const tagRoutes = require('./routes/tagRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
@@ -28,6 +30,8 @@ const authLimiter = rateLimit({
 // Mount Routes
 app.use('/api/v1/auth', authLimiter, authRoutes);
 app.use('/api/v1/prompts', promptRoutes);
+app.use('/api/v1/categories', categoryRoutes);
+app.use('/api/v1/tags', tagRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {
