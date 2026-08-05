@@ -71,9 +71,9 @@ export async function renderPromptList(container) {
                                 <button class="icon-btn btn-delete-prompt text-danger" data-id="${p.id}" title="Delete Prompt" style="width: 32px; height: 32px;"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                            ${p.content}
-                        </p>
+                        <div class="markdown-preview" style="color: var(--text-secondary); font-size: 0.9rem; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-top: 8px; margin-bottom: 8px; line-height: 1.5;">
+                            ${typeof marked !== 'undefined' ? marked.parse(p.content) : p.content}
+                        </div>
                         <div style="display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap;">
                             ${p.tags ? p.tags.map(t => `<span style="background-color: ${t.color}; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem;">${t.name}</span>`).join('') : ''}
                         </div>

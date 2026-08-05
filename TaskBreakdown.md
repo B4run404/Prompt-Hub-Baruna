@@ -116,7 +116,7 @@ UI History Version Panel
 Task 7 (Selesai)
 Fitur Copy to Clipboard
 
-Task 8
+Task 8 (Selesai)
 Markdown Preview Parser (Frontend)
 
 ---
