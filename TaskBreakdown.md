@@ -236,16 +236,16 @@ Frontend Progress Bar Upload
 ---
 
 ### Sprint 14: Template Library
-Task 1
+Task 1 (Selesai)
 Database Schema & API (Templates)
 
-Task 2
+Task 2 (Selesai)
 UI Template Gallery
 
-Task 3
+Task 3 (Selesai)
 Fitur Duplicate Template ke Prompt
 
-Task 4
+Task 4 (Selesai)
 Fitur Edit Template
 
 ---

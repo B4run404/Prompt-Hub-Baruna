@@ -181,6 +181,15 @@ async function showPromptModal(container, existingPrompt = null) {
     const isEdit = !!existingPrompt;
     let fullPrompt = null;
     let historyHtml = '';
+    let templateData = null;
+
+    if (!isEdit) {
+        const tplStr = sessionStorage.getItem('use_template_data');
+        if (tplStr) {
+            templateData = JSON.parse(tplStr);
+            sessionStorage.removeItem('use_template_data'); // consume it
+        }
+    }
 
     if (isEdit) {
         try {
@@ -237,11 +246,11 @@ async function showPromptModal(container, existingPrompt = null) {
             <form id="form-add-prompt">
                 <div style="margin-bottom: 16px;">
                     <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-secondary);">Title</label>
-                    <input type="text" id="prompt-title" class="clay-input" required placeholder="e.g. SEO Blog Post Generator" value="${isEdit ? existingPrompt.title : ''}">
+                    <input type="text" id="prompt-title" class="clay-input" required placeholder="e.g. SEO Blog Post Generator" value="${isEdit ? existingPrompt.title : (templateData ? templateData.title : '')}">
                 </div>
                 <div style="margin-bottom: 24px;">
                     <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-secondary);">Content</label>
-                    <textarea id="prompt-content" class="clay-input" required placeholder="Write your prompt logic here..." style="min-height: 120px; resize: vertical;">${isEdit ? existingPrompt.content : ''}</textarea>
+                    <textarea id="prompt-content" class="clay-input" required placeholder="Write your prompt logic here..." style="min-height: 120px; resize: vertical;">${isEdit ? existingPrompt.content : (templateData ? templateData.content : '')}</textarea>
                 </div>
                 ${historyHtml}
                 <div style="display: flex; gap: 12px; justify-content: flex-end;">
