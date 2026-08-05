@@ -212,7 +212,7 @@ Database Schema (Assets)
 Task 2 (Selesai)
 UI Asset Gallery (Grid)
 
-Task 3
+Task 3 (Selesai)
 UI Modal Upload File
 
 Task 4

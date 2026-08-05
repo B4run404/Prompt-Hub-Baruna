@@ -43,6 +43,30 @@ export async function renderAssetGallery(container) {
             html += `</div>`;
         }
 
+        // Upload Modal UI
+        html += `
+            <div id="upload-asset-modal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+                <div class="clay-card" style="width: 90%; max-width: 500px; background: var(--surface);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h2 style="margin: 0; font-size: 1.5rem;">Upload Asset</h2>
+                        <button id="close-upload-modal" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <form id="upload-asset-form">
+                        <div class="form-group" style="border: 2px dashed var(--glass-border); border-radius: 12px; padding: 32px; text-align: center; margin-bottom: 24px; position: relative; cursor: pointer;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--glass-border)'">
+                            <i class="fa-solid fa-cloud-arrow-up fa-3x" style="color: var(--primary); margin-bottom: 12px;"></i>
+                            <p style="margin: 0; color: var(--text-secondary);">Click or drag file to this area to upload</p>
+                            <input type="file" id="asset-file-input" required style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                        </div>
+                        <div id="selected-file-name" style="margin-bottom: 16px; font-size: 0.9rem; color: var(--primary); font-weight: 600; text-align: center; min-height: 20px;"></div>
+                        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                            <button type="button" id="cancel-upload-btn" class="btn" style="background: transparent; border: 1px solid var(--glass-border); color: var(--text-primary);">Cancel</button>
+                            <button type="submit" id="submit-upload-btn" class="btn btn-primary clay-btn" disabled>Upload File</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+
         container.innerHTML = html;
         bindEvents(container);
 
@@ -82,12 +106,74 @@ function bindEvents(container) {
         });
     });
 
-    // We will implement the upload modal in Sprint 12 Task 3
+    // Modal Elements
+    const uploadModal = document.getElementById('upload-asset-modal');
+    const closeUploadModal = document.getElementById('close-upload-modal');
+    const cancelUploadBtn = document.getElementById('cancel-upload-btn');
+    const uploadForm = document.getElementById('upload-asset-form');
+    const fileInput = document.getElementById('asset-file-input');
+    const selectedFileName = document.getElementById('selected-file-name');
+    const submitBtn = document.getElementById('submit-upload-btn');
+
+    const openModal = () => {
+        uploadModal.style.display = 'flex';
+    };
+
+    const closeModal = () => {
+        uploadModal.style.display = 'none';
+        uploadForm.reset();
+        selectedFileName.textContent = '';
+        submitBtn.disabled = true;
+    };
+
     const uploadBtn = document.getElementById('btn-upload-asset');
     if (uploadBtn) {
-        uploadBtn.addEventListener('click', () => {
-            // Task 3 placeholder action
-            alert('Upload Modal UI will be implemented in Sprint 12 Task 3');
-        });
+        uploadBtn.addEventListener('click', openModal);
     }
+
+    closeUploadModal.addEventListener('click', closeModal);
+    cancelUploadBtn.addEventListener('click', closeModal);
+
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            selectedFileName.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            submitBtn.disabled = false;
+        } else {
+            selectedFileName.textContent = '';
+            submitBtn.disabled = true;
+        }
+    });
+
+    uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+
+        try {
+            // Mock upload logic for Sprint 12
+            // We use URL.createObjectURL to generate a temporary local URL for the file
+            const mockUrl = URL.createObjectURL(file);
+            
+            const assetData = {
+                filename: file.name,
+                url: mockUrl,
+                file_type: file.type || 'application/octet-stream',
+                size: file.size
+            };
+
+            const { createAsset } = await import('../../services/assetService.js');
+            await createAsset(assetData);
+            
+            closeModal();
+            renderAssetGallery(container);
+        } catch (err) {
+            alert('Failed to upload asset: ' + err.message);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Upload File';
+        }
+    });
 }
