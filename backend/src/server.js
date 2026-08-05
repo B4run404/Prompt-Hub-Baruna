@@ -11,6 +11,7 @@ const projectRoutes = require('./routes/projectRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 const snippetRoutes = require('./routes/snippetRoutes');
+const assetRoutes = require('./routes/assetRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
@@ -40,6 +41,7 @@ app.use('/api/v1/projects', projectRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
 app.use('/api/v1/documents', documentRoutes);
 app.use('/api/v1/snippets', snippetRoutes);
+app.use('/api/v1/assets', assetRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {
