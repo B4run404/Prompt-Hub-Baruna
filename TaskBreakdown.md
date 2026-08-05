@@ -209,7 +209,7 @@ UI View Code Snippet (dengan tombol Copy)
 Task 1 (Selesai)
 Database Schema (Assets)
 
-Task 2
+Task 2 (Selesai)
 UI Asset Gallery (Grid)
 
 Task 3
