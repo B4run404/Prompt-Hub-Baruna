@@ -29,12 +29,20 @@ export function loadPage(pageId) {
         }
     });
 
-    // Update DOM content
-    // Pada pengembangan selanjutnya, ini akan melakukan fetch komponen/template
-    pageContent.innerHTML = `
-        <div class="clay-card">
-            <h2>${pageId.charAt(0).toUpperCase() + pageId.slice(1)}</h2>
-            <p style="margin-top: 16px; color: var(--text-secondary);">This module is currently under development (Sprint Planning).</p>
-        </div>
-    `;
+    // Dynamic Route Handling
+    if (pageId === 'prompts') {
+        import('../modules/prompts/promptUI.js').then(module => {
+            module.renderPromptList(pageContent);
+        }).catch(err => {
+            pageContent.innerHTML = `<div class="clay-card"><h2 class="text-danger">Error Loading Module</h2><p>${err.message}</p></div>`;
+        });
+    } else {
+        // Fallback for undeveloped pages
+        pageContent.innerHTML = `
+            <div class="clay-card">
+                <h2>${pageId.charAt(0).toUpperCase() + pageId.slice(1)}</h2>
+                <p style="margin-top: 16px; color: var(--text-secondary);">This module is currently under development (Sprint Planning).</p>
+            </div>
+        `;
+    }
 }

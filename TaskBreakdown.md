@@ -77,7 +77,7 @@ CRUD API (Backend Route & Controller)
 Task 3 (Selesai)
 Service Layer Logic (Validasi & Akses)
 
-Task 4
+Task 4 (Selesai)
 UI Table/List Prompt (Frontend)
 
 Task 5
