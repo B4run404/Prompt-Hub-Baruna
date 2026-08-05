@@ -215,7 +215,7 @@ UI Asset Gallery (Grid)
 Task 3 (Selesai)
 UI Modal Upload File
 
-Task 4
+Task 4 (Selesai)
 Logika Relasi Asset dengan Project
 
 ---

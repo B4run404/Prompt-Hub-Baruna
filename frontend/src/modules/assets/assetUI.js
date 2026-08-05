@@ -3,7 +3,15 @@ export async function renderAssetGallery(container) {
     
     try {
         const { fetchAssets } = await import('../../services/assetService.js');
-        const assets = await fetchAssets();
+        const { fetchProjects } = await import('../../services/projectService.js');
+        
+        const [assets, projects] = await Promise.all([
+            fetchAssets(),
+            fetchProjects()
+        ]);
+        
+        // Store projects globally for the modal
+        window.currentProjects = projects || [];
 
         let html = `
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
@@ -20,6 +28,7 @@ export async function renderAssetGallery(container) {
             assets.forEach(asset => {
                 const isImage = asset.file_type.startsWith('image/');
                 const displaySize = (asset.size / 1024).toFixed(1) + ' KB';
+                const projectPill = asset.project ? `<span style="font-size: 0.7rem; background: rgba(139, 92, 246, 0.2); color: #8b5cf6; padding: 2px 6px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: inline-block;">${asset.project.name}</span>` : '';
                 
                 html += `
                     <div class="clay-card asset-card" data-id="${asset.id}" data-url="${asset.url}" style="position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 0; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
@@ -33,7 +42,7 @@ export async function renderAssetGallery(container) {
                             <h4 style="margin: 0; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${asset.filename}">${asset.filename}</h4>
                             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-secondary);">
                                 <span>${displaySize}</span>
-                                <span>${asset.file_type.split('/')[1] || 'file'}</span>
+                                ${projectPill}
                             </div>
                         </div>
                         <button class="icon-btn btn-delete-asset" data-id="${asset.id}" style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); color: #ef4444; width: 28px; height: 28px;"><i class="fa-solid fa-trash"></i></button>
@@ -41,6 +50,14 @@ export async function renderAssetGallery(container) {
                 `;
             });
             html += `</div>`;
+        }
+
+        // Generate options for projects
+        let projectOptions = '<option value="">-- No Project (Standalone) --</option>';
+        if (window.currentProjects) {
+            window.currentProjects.forEach(p => {
+                projectOptions += `<option value="${p.id}">${p.name}</option>`;
+            });
         }
 
         // Upload Modal UI
@@ -52,12 +69,20 @@ export async function renderAssetGallery(container) {
                         <button id="close-upload-modal" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                     <form id="upload-asset-form">
-                        <div class="form-group" style="border: 2px dashed var(--glass-border); border-radius: 12px; padding: 32px; text-align: center; margin-bottom: 24px; position: relative; cursor: pointer;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--glass-border)'">
+                        <div class="form-group" style="border: 2px dashed var(--glass-border); border-radius: 12px; padding: 32px; text-align: center; margin-bottom: 16px; position: relative; cursor: pointer;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--glass-border)'">
                             <i class="fa-solid fa-cloud-arrow-up fa-3x" style="color: var(--primary); margin-bottom: 12px;"></i>
                             <p style="margin: 0; color: var(--text-secondary);">Click or drag file to this area to upload</p>
                             <input type="file" id="asset-file-input" required style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
                         </div>
                         <div id="selected-file-name" style="margin-bottom: 16px; font-size: 0.9rem; color: var(--primary); font-weight: 600; text-align: center; min-height: 20px;"></div>
+                        
+                        <div class="form-group" style="margin-bottom: 24px;">
+                            <label>Link to Project (Optional)</label>
+                            <select id="asset-project-select" class="clay-input" style="background: var(--surface); color: var(--text-primary); border: 1px solid var(--glass-border);">
+                                ${projectOptions}
+                            </select>
+                        </div>
+
                         <div style="display: flex; justify-content: flex-end; gap: 12px;">
                             <button type="button" id="cancel-upload-btn" class="btn" style="background: transparent; border: 1px solid var(--glass-border); color: var(--text-primary);">Cancel</button>
                             <button type="submit" id="submit-upload-btn" class="btn btn-primary clay-btn" disabled>Upload File</button>
@@ -158,11 +183,14 @@ function bindEvents(container) {
             // We use URL.createObjectURL to generate a temporary local URL for the file
             const mockUrl = URL.createObjectURL(file);
             
+            const projectId = document.getElementById('asset-project-select').value;
+
             const assetData = {
                 filename: file.name,
                 url: mockUrl,
                 file_type: file.type || 'application/octet-stream',
-                size: file.size
+                size: file.size,
+                project_id: projectId ? projectId : null
             };
 
             const { createAsset } = await import('../../services/assetService.js');
