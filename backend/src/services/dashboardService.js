@@ -16,12 +16,31 @@ const getStats = async (userId) => {
         prisma.category.count({ where: { user_id: userId } }),
     ]);
 
+    const recentPrompts = await prisma.prompt.findMany({
+        where: { user_id: userId, is_deleted: false },
+        orderBy: { updated_at: 'desc' },
+        take: 5,
+        select: { id: true, title: true, updated_at: true }
+    });
+    const recentProjects = await prisma.project.findMany({
+        where: { user_id: userId },
+        orderBy: { updated_at: 'desc' },
+        take: 5,
+        select: { id: true, name: true, updated_at: true }
+    });
+
+    const recentActivity = [
+        ...recentPrompts.map(p => ({ id: p.id, type: 'Prompt', title: p.title, updated_at: p.updated_at })),
+        ...recentProjects.map(p => ({ id: p.id, type: 'Project', title: p.name, updated_at: p.updated_at }))
+    ].sort((a, b) => b.updated_at - a.updated_at).slice(0, 5);
+
     return {
         totalProjects,
         totalPrompts,
         favoritePrompts,
         favoriteProjects,
-        totalCategories
+        totalCategories,
+        recentActivity
     };
 };
 

@@ -53,7 +53,33 @@ export async function renderDashboard(container) {
             </div>
             
             <div id="recent-activity-container" style="margin-top: 32px;">
-                <!-- Placeholder for Sprint 9 Task 5 -->
+                <div class="clay-card">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 16px;">Recent Activity</h2>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--glass-border);">
+                                    <th style="padding: 12px; color: var(--text-secondary); font-weight: 600;">Type</th>
+                                    <th style="padding: 12px; color: var(--text-secondary); font-weight: 600;">Title / Name</th>
+                                    <th style="padding: 12px; color: var(--text-secondary); font-weight: 600;">Last Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${stats.recentActivity && stats.recentActivity.length > 0 ? stats.recentActivity.map(act => `
+                                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                                        <td style="padding: 12px;">
+                                            <span style="display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; background: ${act.type === 'Prompt' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(139, 92, 246, 0.2)'}; color: ${act.type === 'Prompt' ? '#10b981' : '#8b5cf6'};">
+                                                ${act.type}
+                                            </span>
+                                        </td>
+                                        <td style="padding: 12px; font-weight: 500;">${act.title}</td>
+                                        <td style="padding: 12px; color: var(--text-secondary);">${new Date(act.updated_at).toLocaleString()}</td>
+                                    </tr>
+                                `).join('') : '<tr><td colspan="3" style="padding: 12px; text-align: center; color: var(--text-secondary);">No recent activity found.</td></tr>'}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         `;
         

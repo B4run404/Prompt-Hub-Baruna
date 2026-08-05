@@ -170,7 +170,7 @@ API Statistik Dashboard (Total Row)
 Task 4 (Selesai)
 UI Widget Dashboard (Statistik)
 
-Task 5
+Task 5 (Selesai)
 Menampilkan Recent Activity Table
 
 ---
